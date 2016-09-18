@@ -1,18 +1,18 @@
 {
   "misc": {
-    "prefix": "s.",
-    "bot_name": "Samantha",
-    "autosave": 300000,
-    "autostatus": 120000,
-    "debug": true
+    "prefix": "",
+    "bot_name": "",
+    "autosave": ,
+    "autostatus": ,
+    "debug": 
   },
   "login": {
-    "token": "MjI2MDEzNTc5NTI5MTU4NjU4.CrxbDg.TMEDNLnBHCwZR5qOWt1-H1z99Oo"
+    "token": ""
   },
   "perms": {
-    "master": "154923436831932416"
+    "master": ""
   },
   "useless": {
-    "playing": ["Type s.commands for a list of commands!", "You can get a list of commands with s.commands!", "Made by Coocla33!", "Cooking a lovely cake!", "s.commands is all you need!", "Doing some grocery shopping!", "Learning new things..."]
+    "playing": []
   }
 }
