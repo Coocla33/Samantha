@@ -3,7 +3,7 @@ Samantha is one of my projects, it is a discord bot that is designed to make you
 
 ### Config.json
 This is a example of the config file!
-```
+```json
 {
   "misc": {
     "prefix": "",
