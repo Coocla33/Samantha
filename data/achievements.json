@@ -1,0 +1,32 @@
+{
+  "0": {
+    "emoji": ":full_moon:",
+    "type": "commands_used",
+    "needed": 5,
+    "desc": "You used 5 commands!"
+  },
+  "1": {
+    "emoji": ":waning_gibbous_moon:",
+    "type": "commands_used",
+    "needed": 10,
+    "desc": "You used 10 commands!"
+  },
+  "2": {
+    "emoji": ":last_quarter_moon:",
+    "type": "commands_used",
+    "needed": 25,
+    "desc": "You used 25 commands!"
+  },
+  "3": {
+    "emoji": ":waning_crescent_moon:",
+    "type": "commands_used",
+    "needed": 50,
+    "desc": "You used 50 commands!"
+  },
+  "4": {
+    "emoji": ":new_moon:",
+    "type": "commands_used",
+    "needed": 100,
+    "desc": "You used 100 commands!"
+  }
+}

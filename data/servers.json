@@ -1,0 +1,51 @@
+{
+    "154957923410247680": {
+        "settings": {
+            "admin": [
+                "154923436831932416"
+            ],
+            "joinMessage": true,
+            "leaveMessage": true,
+            "customPrefix": "s."
+        },
+        "custom": {
+            "join": "Oh look! A person joined the server! I think their name is `$(user_name)`!",
+            "leave": "Oh look! A person left the server! I think their name was `$(user_name)`!"
+        },
+        "achievement": []
+    },
+    "208253121091076097": {
+        "settings": {
+            "admin": [
+                "154923436831932416",
+                "169423968040648704",
+                "226013579529158658",
+                "226719769238306816",
+                "191967906530066432"
+            ],
+            "joinMessage": true,
+            "leaveMessage": true,
+            "customPrefix": "s."
+        },
+        "custom": {
+            "join": "Oh look! A person joined the server! I think their name is `$(user_name)`!",
+            "leave": "Bye Bye! See you soon $(user_name)"
+        },
+        "achievement": []
+    },
+    "216204164705812481": {
+        "settings": {
+            "admin": [
+                "214829454780923906",
+                "154923436831932416"
+            ],
+            "joinMessage": true,
+            "leaveMessage": true,
+            "customPrefix": "s."
+        },
+        "custom": {
+            "join": "Welkom $(user_name) bij de officiële server genaamd $(server_name)",
+            "leave": "Vaarwel $(user_name)!"
+        }
+    }
+}
