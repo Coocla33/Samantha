@@ -21,4 +21,5 @@ This is a example of the config file!
   "useless": {
     "playing": []
   }
-}```
+}
+```
