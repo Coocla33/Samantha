@@ -1,4 +1,4 @@
-## What *is* Samantha?
+## Who *is* Samantha?
 Samantha is a Discord Bot, she is designed to make the live of a server easier *(Making it more fun for users, making managing easier for server staff etc)*!
 
 ## What *can* Samantha do?
