@@ -28,5 +28,11 @@
     "type": "commands_used",
     "needed": 100,
     "desc": "You used 100 commands!"
+  },
+  "5": {
+    "emoji": ":new_moon_with_face:",
+    "type": "commands_used",
+    "needed": 1000,
+    "desc": "You used 1000 commands!!1!1!!!!"
   }
 }

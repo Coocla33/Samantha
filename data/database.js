@@ -93,7 +93,7 @@ var functions = {
   },
   user_create_object: {
     fn:function(user) {
-      var object = {"name": user.username, "stats": {"commandsUsed": 1}, "achievement": [false, false, false, false, false]}
+      var object = {"name": user.username, "stats": {"commandsUsed": 1}, "achievement": [false, false, false, false, false, false]}
       users[user.id] = object
       functions.users_save.fn(users)
     }
@@ -226,6 +226,15 @@ var functions = {
           }
         }
       }
+    }
+  },
+  uptime: {
+    fn: function(seconds) {
+      var uptimeSecNum = parseInt(seconds, 10)
+      var uptimeHour = Math.floor(uptimeSecNum / 3600)
+      var uptimeMin = Math.floor((uptimeSecNum - (uptimeHour * 3600)) / 60)
+      var uptimeSec = (uptimeSecNum - (uptimeHour * 3600) - (uptimeMin * 60))
+      return {"sec": uptimeSec, "hour": uptimeHour, "min": uptimeMin}
     }
   }
 }

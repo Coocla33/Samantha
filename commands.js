@@ -56,8 +56,8 @@ var cmds = {
     'admin': true,
     fn: function(bot, msg, suffix) {
       if (suffix) {
-        if (suffix.split(' ')[0] == 'enable') { //Enable
-          if (suffix.split(' ')[1] == 'joinMessage') { //Enable JoinMessage
+        if (suffix.toLowerCase().split(' ')[0] == 'enable') { //Enable
+          if (suffix.toLowerCase().split(' ')[1] == 'joinMessage') { //Enable JoinMessage
             if (servers[msg.guild.id].settings.joinMessage == true) {
               msg.channel.sendMessage('This setting is already set to be enabled!')
             }
@@ -66,7 +66,7 @@ var cmds = {
               msg.channel.sendMessage('Enabled joinMessage!')
             }
           }
-          else if (suffix.split(' ')[1] == 'leaveMessage') { //Enable LeaveMessage
+          else if (suffix.toLowerCase().split(' ')[1] == 'leaveMessage') { //Enable LeaveMessage
             if (servers[msg.guild.id].settings.leaveMessage == true) {
               msg.channel.sendMessage('This setting is already set to be enabled!')
             }
@@ -79,8 +79,8 @@ var cmds = {
            msg.channel.sendMessage('Oh ooh! Something went wrong! Type `' + prefix + 'help customize` to see what you did wrong!')
           }
         }
-        else if (suffix.split(' ')[0] == 'disable') { //Disable
-          if (suffix.split(' ')[1] == 'joinMessage') { //Disable JoinMessage
+        else if (suffix.toLowerCase().split(' ')[0] == 'disable') { //Disable
+          if (suffix.toLowerCase().split(' ')[1] == 'joinMessage') { //Disable JoinMessage
             if (servers[msg.guild.id].settings.joinMessage == false) {
               msg.channel.sendMessage('This setting is already set to be disabled!')
             }
@@ -89,7 +89,7 @@ var cmds = {
               msg.channel.sendMessage('Disabled joinMessage!')
             }
           }
-          else if (suffix.split(' ')[1] == 'leaveMessage') { //Disable LeaveMessage
+          else if (suffix.toLowerCase().split(' ')[1] == 'leaveMessage') { //Disable LeaveMessage
             if (servers[msg.guild.id].settings.leaveMessage == false) {
               msg.channel.sendMessage('This setting is already set to be disabled!')
             }
@@ -98,9 +98,12 @@ var cmds = {
               msg.channel.sendMessage('Disabled leaveMessage!')
             }
           }
+          else {
+            msg.channel.sendMessage('Oh ooh! Something went wrong! Type `' + prefix + 'help customize` to see what you did wrong!')
+          }
         }
-        else if (suffix.split(' ')[0] == 'set') { //Set
-          if (suffix.split(' ')[1] == 'joinMessage') { //Setting JoinMessage
+        else if (suffix.toLowerCase().split(' ')[0] == 'set') { //Set
+          if (suffix.toLowerCase().split(' ')[1] == 'joinMessage') { //Setting JoinMessage
             if (servers[msg.guild.id].settings.joinMessage == true) {
               var message_split = suffix.split(' ')
               message = message_split.splice(2, message_split.length).join(' ')
@@ -116,7 +119,7 @@ var cmds = {
               msg.channel.sendMessage('Oh ooh! Something went wrong! Are you sure you enabled the joinMessage? Type `' + prefix + 'help customize` to see how to enable it!')
             }
           }
-          else if (suffix.split(' ')[1] == 'leaveMessage') { //Setting LeaveMessage
+          else if (suffix.toLowerCase().split(' ')[1] == 'leavemessage') { //Setting LeaveMessage
             if (servers[msg.guild.id].settings.joinMessage == true) {
               var message_split = suffix.split(' ')
               message = message_split.splice(2, message_split.length).join(' ')
@@ -131,6 +134,9 @@ var cmds = {
             else {
               msg.channel.sendMessage('Oh ooh! Something went wrong! Are you sure you enabled the joinMessage? Type `' + prefix + 'help customize` to see how to enable it!')
             }
+          }
+          else {
+            msg.channel.sendMessage('Oh ooh! Something went wrong! Type `' + prefix + 'help customize` to see what you did wrong!')
           }
         }
         else {
@@ -228,7 +234,7 @@ var cmds = {
     'usage': '<adminlist>',
     'cooldown': 5000,
     'master': false,
-    'admin': true,
+    'admin': false,
     fn: function(bot, msg, suffix) {
       var adminArray = []
       for (var i of servers[msg.guild.id].settings.admin) {
@@ -281,7 +287,7 @@ var cmds = {
           }
         }
         catch (err) {
-          if (config.misc.debu == true) {
+          if (config.misc.debug == true) {
             msg.edit('```Result:\n' + err.stack + '```')
           }
           else {
@@ -289,6 +295,18 @@ var cmds = {
           }
         }
       })
+    }
+  },
+  uptime: {
+    'name': 'uptime',
+    'desc': 'The uptime of the bot!',
+    'usage': '<uptime>',
+    'cooldown': 5000,
+    'master': true,
+    'admin': false,
+    fn: function(bot, msg, suffix) {
+      var uptime = db.execute.uptime.fn(bot.uptime / 1000)
+      msg.channel.sendMessage('Uptime: ' + uptime.hour + ':' + uptime.min + ':' + uptime.sec)
     }
   }
 }

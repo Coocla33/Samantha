@@ -1,1 +1,30 @@
-
+{
+    "208253121091076097": {
+        "settings": {
+            "admin": [
+                "154923436831932416"
+            ],
+            "joinMessage": true,
+            "leaveMessage": true,
+            "customPrefix": "s."
+        },
+        "custom": {
+            "join": "Oh look! A person joined the server! I think their name is `$(user_name)`!",
+            "leave": "Oh look! A person left the server! I think their name was `$(user_name)`!"
+        }
+    },
+    "216204164705812481": {
+        "settings": {
+            "admin": [
+                "214829454780923906"
+            ],
+            "joinMessage": true,
+            "leaveMessage": true,
+            "customPrefix": "s."
+        },
+        "custom": {
+            "join": "Oh look! A person joined the server! I think their name is `$(user_name)`!",
+            "leave": "Oh look! A person left the server! I think their name was `$(user_name)`!"
+        }
+    }
+}

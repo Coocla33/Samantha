@@ -53,27 +53,55 @@ bot.on('message', msg => {
     try {
       if (cmd.execute[name]) {
         if (users[msg.author.id]) {
-          if (cmd.execute[name].master == true) {
+          if (cmd.execute[name].master == true) { //Master Commands
             if (msg.author.id == config.perms.master) {
               cmd.execute[name].fn(bot, msg, suffix)
               db.execute.command_log.fn(name, msg)
               users[msg.author.id].stats.commandsUsed += 1
+              cooldown(msg, name)
             }
             else {
               msg.channel.sendMessage('Oh ooh! Something went wrong! Are you sure you are allowed to use this command? You can type `' + prefix + 'commands` to see a full list of all the commands you may use!')
             }
           }
-          else if (cmd.execute[name].admin == true) {
+          else if (cmd.execute[name].admin == true) { //Admin Commands
             if (servers[msg.guild.id].settings.admin.indexOf(msg.author.id) > -1) {
               cmd.execute[name].fn(bot, msg, suffix)
               db.execute.command_log.fn(name, msg)
               users[msg.author.id].stats.commandsUsed += 1
+              cooldown(msg, name)
+            }
+            else {
+              msg.channel.sendMessage('Oh ooh! Something went wrong! Are you sure you are allowed to use this command? You can type `' + prefix + 'commands` to see a full list of all the commands you may use!')
             }
           }
-          else {
-            cmd.execute[name].fn(bot, msg, suffix)
-            db.execute.command_log.fn(name, msg)
-            users[msg.author.id].stats.commandsUsed += 1
+          else { //Default Commands
+            if (user_cooldown[msg.author.id]) {
+              if (user_cooldown[msg.author.id][name]) {
+                if (user_cooldown[msg.author.id][name].cooldown < new Date()) {
+                  cmd.execute[name].fn(bot, msg, suffix)
+                  db.execute.command_log.fn(name, msg)
+                  users[msg.author.id].stats.commandsUsed += 1
+                  cooldown(msg, name)
+                }
+                else {
+                  var wait = user_cooldown[msg.author.id][name].cooldown - new Date()
+                  msg.channel.sendMessage('Oh ooh! You went to fast! Wait another `' + wait + 'ms` to use this command again!')
+                }
+              }
+              else {
+                cooldown(msg, name)
+                cmd.execute[name].fn(bot, msg, suffix)
+                db.execute.command_log.fn(name, msg)
+                users[msg.author.id].stats.commandsUsed += 1
+              }
+            }
+            else {
+              cooldown(msg, name)
+              cmd.execute[name].fn(bot, msg, suffix)
+              db.execute.command_log.fn(name, msg)
+              users[msg.author.id].stats.commandsUsed += 1
+            }
           }
         }
         else {
@@ -90,6 +118,7 @@ bot.on('message', msg => {
       else {
         console.log(log_time() + log_err + 'Command: ' + name + ' Error: ' + err)
       }
+      console.log(log_time() + log_err + 'Command: ' + name + ' Error: ' + err.stack)
     }
   }
 })
@@ -115,5 +144,22 @@ bot.on('guildMemberAdd', (guild, member) => {
 bot.on('guildMemberRemove', (guild, member) => {
   db.execute.user_leave.fn(guild, member)
 })
+
+var cooldown = function(msg, cmdn) {
+  var date = new Date()
+  var new_cooldown = new Date(date.getTime() + cmd.execute[cmdn].cooldown)
+  var user_id = msg.author.id
+  if (user_cooldown[msg.author.id]) {
+    if (user_cooldown[msg.author.id][cmdn]) {
+      user_cooldown[msg.author.id][cmdn].cooldown = new_cooldown
+    }
+    else {
+      user_cooldown[msg.author.id][cmdn] = {'cooldown': new_cooldown}
+    }
+  }
+  else {
+    user_cooldown[msg.author.id] = {[cmdn]: {'cooldown': new_cooldown}}
+  }
+}
 
 bot.login(config.login.token)
