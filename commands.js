@@ -2,6 +2,7 @@ const db = require('./data/database.js')
 const servers = require('./data/servers.json')
 const users = require('./data/users.json')
 const config = require('./config.json')
+const blacklist = require('./data//blacklist.json')
 
 var prefix = config.misc.prefix
 
@@ -307,6 +308,95 @@ var cmds = {
     fn: function(bot, msg, suffix) {
       var uptime = db.execute.uptime.fn(bot.uptime / 1000)
       msg.channel.sendMessage('Uptime: ' + uptime.hour + ':' + uptime.min + ':' + uptime.sec)
+    }
+  },
+  blacklist: {
+    'name': 'blacklist',
+    'desc': 'Just adding some people to the naughty list...',
+    'usage': '<blacklist> [player_mention]',
+    'cooldown': 5000,
+    'master': true,
+    'admin': false,
+    fn: function(bot, msg, suffix) {
+      if (msg.mentions.users.size > 0) {
+        if (blacklist[msg.mentions.users.array()[0].id]) {
+          msg.channel.sendMessage('This person is already in the blacklist! Noob.')
+        }
+        else {
+          msg.channel.sendMessage('Adding `' + msg.mentions.users.array()[0].username + '` to the blacklist!')
+          blacklist[msg.mentions.users.array()[0].id] = {'date': new Date(), 'name': msg.mentions.users.array()[0].username}
+          db.execute.blacklist_save.fn(blacklist)
+        }
+      }
+      else {
+        msg.channel.sendMessage('Oh ooh! Something went wrong! Type `' + prefix + 'help blacklist` to see what you did wrong!')
+      }
+    }
+  },
+  blacklistremove: {
+    'name': 'blacklistRemove',
+    'desc': 'Just removing some people to the naughty list...',
+    'usage': '<blacklistremove> [player_mention]',
+    'cooldown': 5000,
+    'master': true,
+    'admin': false,
+    fn: function(bot, msg, suffix) {
+      if (msg.mentions.users.size > 0) {
+        if (blacklist[msg.mentions.users.array()[0].id]) {
+          msg.channel.sendMessage('Removing `' + msg.mentions.users.array()[0].username + '` from the blacklist!')
+          delete blacklist[msg.mentions.users.array()[0].id]
+          db.execute.blacklist_save.fn(blacklist)
+        }
+        else {
+          msg.channel.sendMessage('This person is not in the blacklist! So i can not remove him/her...')
+        }
+      }
+      else {
+        msg.channel.sendMessage('Oh ooh! Something went wrong! Type `' + prefix + 'help blacklist` to see what you did wrong!')
+      }
+    }
+  },
+  naughtylist: {
+    'name': 'naughtyList',
+    'desc': 'Just showing the naughty list...',
+    'usage': '<naughtylist>',
+    'cooldown': 5000,
+    'master': false,
+    'admin': false,
+    fn: function(bot, msg, suffix) {
+      var blacklistArray = []
+      for (var i in blacklist) {
+        var date = new Date(blacklist[i].date)
+        blacklistArray.push(blacklist[i].name + ' | ' + date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear())
+      }
+      msg.channel.sendMessage('``' + blacklistArray.sort().join('``\n``') + '``')
+    }
+  },
+  inrole: {
+    'name': 'inrole',
+    'desc': 'Showing everybody that has a certain role',
+    'usage': '<inrole> [role_name]',
+    'cooldown': 5000,
+    'master': false,
+    'admin': true,
+    fn: function(bot, msg, suffix) {
+      if (suffix) {
+        var name = suffix
+        if (msg.guild.roles.find('name', name)) {
+          var messageArray = []
+          var roleID = msg.guild.roles.find('name', name).id
+          var membersWithRole = msg.guild.members.filter(m => m.roles.has(roleID))
+          messageArray.push('`[' + membersWithRole.size  + ']`')
+          messageArray.push('``' + membersWithRole.map(m => m.user.username).join('``, ``') + '``')
+          msg.channel.sendMessage(messageArray)
+        }
+        else {
+          msg.channel.sendMessage('Oh ooh! That role does not exist!')
+        }
+      }
+      else {
+        msg.channel.sendMessage('Oh ooh! Something went wrong! Type `' + prefix + 'help inrole` to see what you did wrong!')
+      }
     }
   }
 }

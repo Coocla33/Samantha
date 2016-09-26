@@ -5,6 +5,7 @@ const config = require('./config.json')
 const db = require('./data/database.js')
 const servers = require('./data/servers.json')
 const users = require('./data/users.json')
+const blacklist = require('./data/blacklist.json')
 
 var bot = new Discord.Client()
 
@@ -35,7 +36,7 @@ bot.on('ready', () => {
   console.log(log_time() + log_info + 'Users    | ' + bot.users.size)
   console.log(log_time() + log_info + 'Channels | ' + bot.channels.size)
   console.log(log_time() + log_info + 'Started auto saving!')
-  db.execute.save_auto.fn(servers, users)
+  db.execute.save_auto.fn(servers, users, blacklist)
   db.execute.status_set_auto.fn(bot)
   console.log(log_time() + log_info + 'Updating all servers!')
   db.execute.update_servers.fn(bot)
@@ -51,42 +52,50 @@ bot.on('message', msg => {
 		var name = stub[0].toLowerCase()
 		var suffix = base.substr(stub[0].length + 1)
     try {
-      if (cmd.execute[name]) {
-        if (users[msg.author.id]) {
-          if (cmd.execute[name].master == true) { //Master Commands
-            if (msg.author.id == config.perms.master) {
-              cmd.execute[name].fn(bot, msg, suffix)
-              db.execute.command_log.fn(name, msg)
-              users[msg.author.id].stats.commandsUsed += 1
-              cooldown(msg, name)
+      if (!blacklist[msg.author.id]) {
+        if (cmd.execute[name]) {
+          if (users[msg.author.id]) {
+            if (cmd.execute[name].master == true) { //Master Commands
+              if (msg.author.id == config.perms.master) {
+                cmd.execute[name].fn(bot, msg, suffix)
+                db.execute.command_log.fn(name, msg)
+                users[msg.author.id].stats.commandsUsed += 1
+                cooldown(msg, name)
+              }
+              else {
+                msg.channel.sendMessage('Oh ooh! Something went wrong! Are you sure you are allowed to use this command? You can type `' + prefix + 'commands` to see a full list of all the commands you may use!')
+              }
             }
-            else {
-              msg.channel.sendMessage('Oh ooh! Something went wrong! Are you sure you are allowed to use this command? You can type `' + prefix + 'commands` to see a full list of all the commands you may use!')
+            else if (cmd.execute[name].admin == true) { //Admin Commands
+              if (servers[msg.guild.id].settings.admin.indexOf(msg.author.id) > -1) {
+                cmd.execute[name].fn(bot, msg, suffix)
+                db.execute.command_log.fn(name, msg)
+                users[msg.author.id].stats.commandsUsed += 1
+                cooldown(msg, name)
+              }
+              else {
+                msg.channel.sendMessage('Oh ooh! Something went wrong! Are you sure you are allowed to use this command? You can type `' + prefix + 'commands` to see a full list of all the commands you may use!')
+              }
             }
-          }
-          else if (cmd.execute[name].admin == true) { //Admin Commands
-            if (servers[msg.guild.id].settings.admin.indexOf(msg.author.id) > -1) {
-              cmd.execute[name].fn(bot, msg, suffix)
-              db.execute.command_log.fn(name, msg)
-              users[msg.author.id].stats.commandsUsed += 1
-              cooldown(msg, name)
-            }
-            else {
-              msg.channel.sendMessage('Oh ooh! Something went wrong! Are you sure you are allowed to use this command? You can type `' + prefix + 'commands` to see a full list of all the commands you may use!')
-            }
-          }
-          else { //Default Commands
-            if (user_cooldown[msg.author.id]) {
-              if (user_cooldown[msg.author.id][name]) {
-                if (user_cooldown[msg.author.id][name].cooldown < new Date()) {
+            else { //Default Commands
+              if (user_cooldown[msg.author.id]) {
+                if (user_cooldown[msg.author.id][name]) {
+                  if (user_cooldown[msg.author.id][name].cooldown < new Date()) {
+                    cmd.execute[name].fn(bot, msg, suffix)
+                    db.execute.command_log.fn(name, msg)
+                    users[msg.author.id].stats.commandsUsed += 1
+                    cooldown(msg, name)
+                  }
+                  else {
+                    var wait = user_cooldown[msg.author.id][name].cooldown - new Date()
+                    msg.channel.sendMessage('Oh ooh! You went to fast! Wait another `' + wait + 'ms` to use this command again!')
+                  }
+                }
+                else {
+                  cooldown(msg, name)
                   cmd.execute[name].fn(bot, msg, suffix)
                   db.execute.command_log.fn(name, msg)
                   users[msg.author.id].stats.commandsUsed += 1
-                  cooldown(msg, name)
-                }
-                else {
-                  var wait = user_cooldown[msg.author.id][name].cooldown - new Date()
-                  msg.channel.sendMessage('Oh ooh! You went to fast! Wait another `' + wait + 'ms` to use this command again!')
                 }
               }
               else {
@@ -96,18 +105,15 @@ bot.on('message', msg => {
                 users[msg.author.id].stats.commandsUsed += 1
               }
             }
-            else {
-              cooldown(msg, name)
-              cmd.execute[name].fn(bot, msg, suffix)
-              db.execute.command_log.fn(name, msg)
-              users[msg.author.id].stats.commandsUsed += 1
-            }
+          }
+          else {
+            msg.channel.sendMessage('Generating user profile... Please try again!')
+            db.execute.user_create_object.fn(msg.author)
           }
         }
-        else {
-          msg.channel.sendMessage('Generating user profile... Please try again!')
-          db.execute.user_create_object.fn(msg.author)
-        }
+      }
+      else {
+        //Nothing
       }
     }
     catch (err) {
@@ -118,7 +124,6 @@ bot.on('message', msg => {
       else {
         console.log(log_time() + log_err + 'Command: ' + name + ' Error: ' + err)
       }
-      console.log(log_time() + log_err + 'Command: ' + name + ' Error: ' + err.stack)
     }
   }
 })
