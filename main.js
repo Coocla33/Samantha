@@ -131,7 +131,7 @@ bot.on('message', msg => {
 //Server join
 bot.on('guildCreate', (guild) => {
   db.execute.server_create_object.fn(guild)
-  console.log(log_time() + log_info + 'Join the server <' + guild.name + '>!')
+  console.log(log_time() + log_info + 'Joined the server <' + guild.name + '>!')
 })
 
 //Server leave
