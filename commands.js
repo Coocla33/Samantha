@@ -150,7 +150,7 @@ var cmds = {
       db.execute.servers_save.fn(servers) //Saving to Servers.json
     }
   },
-  update_servers: {
+  update: {
     'name': 'update_servers',
     'desc': 'Update all the servers to the servers.json',
     'usage': '<update_servers>',
@@ -160,17 +160,6 @@ var cmds = {
     fn: function(bot, msg, suffix) {
       msg.channel.sendMessage('Check console for output!')
       db.execute.update_servers.fn(bot)
-    }
-  },
-  update_users: {
-    'name': 'update_users',
-    'desc': 'Update all the users to the users.json',
-    'usage': '<update_users>',
-    'cooldown': 5000,
-    'master': true,
-    'admin': false,
-    fn: function(bot, msg, suffix) {
-      msg.channel.sendMessage('Check console for output!')
       db.execute.update_users.fn(bot)
     }
   },
@@ -397,6 +386,109 @@ var cmds = {
       else {
         msg.channel.sendMessage('Oh ooh! Something went wrong! Type `' + prefix + 'help inrole` to see what you did wrong!')
       }
+    }
+  },
+  kill: {
+    'name': 'kill',
+    'desc': 'Killing people!',
+    'usage': '<kill> [user_mentions, custom_text]',
+    'cooldown': 5000,
+    'master': false,
+    'admin': false,
+    fn: function(bot, msg, suffix) {
+      if (msg.mentions.users.size > 0) {
+        if (msg.mentions.users.array()[0].id == config.perms.master) {
+          msg.channel.sendMessage('Sorry, i can not kill **' + msg.mentions.users.array()[0].username +  '** :(')
+        }
+        else {
+          msg.channel.sendMessage('_Kills **' + msg.mentions.users.array()[0].username + '**_')
+        }
+      }
+      else if (suffix) {
+        if (suffix == 'coocla33' || suffix == 'Coocla33' || suffix == 'samantha' || suffix == 'Samantha' || suffix == 'misha' || suffix == 'Misha') {
+          msg.channel.sendMessage('Sorry, i can not kill **' + suffix + '** :(')
+        }
+        else {
+          msg.channel.sendMessage('_Kills **' + suffix + '**_')
+        }
+      }
+      else {
+        msg.channel.sendMessage('Oh ooh! Something went wrong! Type `' + prefix + 'help kill` to see what you did wrong!')
+      }
+    }
+  },
+  serverinfo: {
+    'name': 'serverInfo',
+    'desc': 'Showing everything about the server!',
+    'usage': '<serverinfo>',
+    'cooldown': 5000,
+    'master': false,
+    'admin': false,
+    fn: function(bot, msg, suffix) {
+      var icon = msg.guild.iconURL
+      if (icon == null) {icon = 'No icon...'}
+      var emojis = msg.guild.emojis.map(e => e.name).join(', ')
+      if (emojis == '') {emojis = 'No custom emojis...'}
+      var messageArray = []
+      var date = msg.guild.creationDate
+      messageArray.push('```')
+      messageArray.push('Name             : ' + msg.guild.name)
+      messageArray.push('Id               : ' + msg.guild.id)
+      messageArray.push('Members          : ' + msg.guild.memberCount)
+      messageArray.push('Custom Emojis    : ' + emojis)
+      messageArray.push('Channels         : ' + msg.guild.channels.size)
+      messageArray.push('Creator          : ' + msg.guild.owner.user.username)
+      messageArray.push('Afk              : ' + msg.guild.afkTimeout + 'sec')
+      messageArray.push('Created          : ' + date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear())
+      messageArray.push('DefaultChannel   : ' + msg.guild.defaultChannel.name)
+      messageArray.push('Region           : ' + msg.guild.region)
+      messageArray.push('Verification lvl : ' + msg.guild.verificationLevel)
+      messageArray.push('Roles            : ' + msg.guild.roles.map(r => r.name).join(', '))
+      messageArray.push('Icon             : ' + icon)
+      messageArray.push('```')
+      msg.channel.sendMessage(messageArray)
+    }
+  },
+  userinfo: {
+    'name': 'userInfo',
+    'desc': 'Showing stuff about yourself and stalking others!',
+    'usage': '<userinfo> [user_mention]',
+    'cooldown': 5000,
+    'master': false,
+    'admin': false,
+    fn: function(bot, msg, suffix) {
+      var messageArray = []
+      if (msg.mentions.users.size > 0) {
+        var game = msg.mentions.users.array()[0].game
+        if (game == null) {game = 'No game here!'} else {game = msg.mentions.users.array()[0].game.name}
+        var avatarURL = msg.mentions.users.array()[0].avatarURL
+        if (avatarURL == null) {avatarURL = 'No avatar...'}
+        messageArray.push('```')
+        messageArray.push('Name    : ' + msg.mentions.users.array()[0].username)
+        messageArray.push('Id      : ' + msg.mentions.users.array()[0].id)
+        messageArray.push('Discrim : ' + msg.mentions.users.array()[0].discriminator)
+        messageArray.push('Status  : ' + msg.mentions.users.array()[0].status)
+        messageArray.push('Game    : ' + game)
+        messageArray.push('Bot     : ' + msg.mentions.users.array()[0].bot)
+        messageArray.push('Icon    : ' + avatarURL)
+        messageArray.push('```')
+      }
+      else {
+        var game = msg.author.game
+        if (game == null) {game = 'No game here!'} else {game = msg.author.game.name}
+        var avatarURL = msg.author.avatarURL
+        if (avatarURL == null) {avatarURL = 'No avatar...'}
+        messageArray.push('```')
+        messageArray.push('Name    : ' + msg.author.username)
+        messageArray.push('Id      : ' + msg.author.id)
+        messageArray.push('Discrim : ' + msg.author.discriminator)
+        messageArray.push('Status  : ' + msg.author.status)
+        messageArray.push('Game    : ' + game)
+        messageArray.push('Bot     : ' + msg.author.bot)
+        messageArray.push('Icon    : ' + avatarURL)
+        messageArray.push('```')
+      }
+      msg.channel.sendMessage(messageArray)
     }
   }
 }

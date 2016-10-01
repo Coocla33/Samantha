@@ -2,6 +2,7 @@ const cmd = require('../commands.js')
 const config = require('../config.json')
 const servers = require('./servers.json')
 const users = require('./users.json')
+const blacklist = require('./blacklist.json')
 const achievements = require('./achievements.json')
 const fs = require('fs')
 const chalk = require('chalk')
@@ -132,25 +133,33 @@ var functions = {
   },
   servers_save: {
     fn: function(servers) {
-      fs.writeFile("./data/servers.json", JSON.stringify(servers, null, 4), function(err){
+      fs.writeFile("./data/servers.json", JSON.stringify(servers, null, 4), function(err) {
           if (err) console.log(log_time() + log_err + err)
       })
     }
   },
   users_save: {
     fn: function(users) {
-      fs.writeFile("./data/users.json", JSON.stringify(users, null, 4), function(err){
+      fs.writeFile("./data/users.json", JSON.stringify(users, null, 4), function(err) {
           if (err) console.log(log_time() + log_err + err)
       })
     }
   },
+  blacklist_save: {
+    fn: function(blacklist) {
+      fs.writeFile("./data/blacklist.json", JSON.stringify(blacklist, null, 4), function(err) {
+        if (err) console.log(log_time() + log_err + err)
+      })
+    }
+  },
   save_auto: {
-    fn: function(servers, users) {
-      console.log(log_time() + log_info + 'Server/User database saved!')
+    fn: function(servers, users, blacklist) {
+      console.log(log_time() + log_info + 'Server/User/Blacklist database saved!')
       functions.servers_save.fn(servers)
       functions.users_save.fn(users)
+      functions.blacklist_save.fn(blacklist)
       setTimeout(() => {
-        functions.save_auto.fn(servers, users)
+        functions.save_auto.fn(servers, users, blacklist)
       }, config.misc.autosave)
     }
   },
