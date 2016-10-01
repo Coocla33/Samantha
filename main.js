@@ -117,7 +117,7 @@ bot.on('message', msg => {
       }
     }
     catch (err) {
-      msg.channel.sendMessage('Oh ooh! Something went wrong! Are you sure you used the command the right way? You can type ``' + prefix + 'help ' + name + '`` to figure out how to use this command!')
+      msg.channel.sendMessage('Oh ooh! Something went wrong! My master screwed something up... Please show this to him: `' + err + '`!')
       if (config.misc.debug == true) {
         console.log(log_time() + log_err + 'Command: ' + name + ' Error: ' + err.stack)
       }
@@ -131,7 +131,7 @@ bot.on('message', msg => {
 //Server join
 bot.on('guildCreate', (guild) => {
   db.execute.server_create_object.fn(guild)
-  console.log(log_time() + log_info + 'Joined the server <' + guild.name + '>!')
+  console.log(log_time() + log_info + 'Join the server <' + guild.name + '>!')
 })
 
 //Server leave
