@@ -1,4 +1,5 @@
 const cmd = require('../commands.js')
+const logger = require('./logger.js')
 const config = require('../config.json')
 const servers = require('./servers.json')
 const users = require('./users.json')
@@ -82,7 +83,7 @@ var functions = {
   },
   server_create_object: {
     fn: function(server) {
-      var object = {"settings": {"admin": [server.owner.id], "joinMessage": true, "leaveMessage": true, "customPrefix": "s."}, "custom": {"join": "Oh look! A person joined the server! I think their name is `$(user_name)`!", "leave": "Oh look! A person left the server! I think their name was `$(user_name)`!"}}
+      var object = {"settings": {"admin": [server.owner.id], "joinMessage": true, "leaveMessage": true, "customPrefix": "s.", "logger": {"enable": false, "channelId": server.defaultChannel.id}}, "custom": {"join": "Oh look! A person joined the server! I think their name is `$(user_name)`!", "leave": "Oh look! A person left the server! I think their name was `$(user_name)`!"}}
       servers[server.id] = object
       functions.servers_save.fn(servers)
     }
@@ -244,6 +245,34 @@ var functions = {
       var uptimeMin = Math.floor((uptimeSecNum - (uptimeHour * 3600)) / 60)
       var uptimeSec = (uptimeSecNum - (uptimeHour * 3600) - (uptimeMin * 60))
       return {"sec": uptimeSec, "hour": uptimeHour, "min": uptimeMin}
+    }
+  },
+  log: {
+    fn: function(bot, user, guildId, channel, type) {
+      if (servers[guildId].settings.logger.enable == true) {
+        var logChannel = servers[guildId].settings.logger.channelId
+        if (type == 'user_join') {
+          logger.execute.user_join.fn(bot, user, logChannel)
+        }
+        else if (type == 'user_leave') {
+          logger.execute.user_leave.fn(bot, user, logChannel)
+        }
+        else if (type == 'user_ban_add') {
+          logger.execute.user_ban_add.fn(bot, user, logChannel)
+        }
+        else if (type == 'user_ban_remove') {
+          logger.execute.user_ban_remove.fn(bot, user, logChannel)
+        }
+        else if (type == 'channel_create') {
+          logger.execute.channel_create.fn(bot, channel, logChannel)
+        }
+        else if (type == 'channel_delete') {
+          logger.execute.channel_delete.fn(bot, channel, logChannel)
+        }
+      }
+      else {
+        //Nothing
+      }
     }
   }
 }
