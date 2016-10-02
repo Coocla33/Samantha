@@ -142,12 +142,34 @@ bot.on('guildDelete', (guild) => {
 
 //User join
 bot.on('guildMemberAdd', (guild, member) => {
+  db.execute.log.fn(bot, member, guild.id, undefined, 'user_join')
   db.execute.user_join.fn(guild, member)
 })
 
 //User leave
 bot.on('guildMemberRemove', (guild, member) => {
+  db.execute.log.fn(bot, member, guild.id, undefined, 'user_leave')
   db.execute.user_leave.fn(guild, member)
+})
+
+//Ban Add
+bot.on('guildBanAdd', (guild, user) => {
+  db.execute.log.fn(bot, user, guild.id, undefined, 'user_ban_add')
+})
+
+//Ban Remove
+bot.on('guildBanRemove', (guild, user) => {
+  db.execute.log.fn(bot, user, guild.id, undefined, 'user_ban_remove')
+})
+
+//Channel Create
+bot.on('channelCreate', (channel) => {
+  db.execute.log.fn(bot, undefined, channel.guild.id, channel, 'channel_create')
+})
+
+//Channel Delete
+bot.on('channelDelete', (channel) => {
+  db.execute.log.fn(bot, undefined, channel.guild.id, channel, 'channel_delete')
 })
 
 var cooldown = function(msg, cmdn) {

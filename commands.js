@@ -490,6 +490,49 @@ var cmds = {
       }
       msg.channel.sendMessage(messageArray)
     }
+  },
+  logger: {
+    'name': 'logger',
+    'desc': 'logging everything!',
+    'usage': '<logger> [enable, disable, set]',
+    'cooldown': 5000,
+    'master': true,
+    'admin': false,
+    fn: function(bot, msg, suffix) {
+      if (suffix) {
+        if (suffix.toLowerCase().split(' ')[0] == 'enable') { //Enable
+          if (servers[msg.guild.id].settings.logger.enable == false) {
+            msg.channel.sendMessage('Logger enabled!')
+            servers[msg.guild.id].settings.logger.enable = true
+            db.execute.servers_save.fn(servers)
+          }
+          else {
+            msg.channel.sendMessage('Oh ooh! You can not enable something that is already enabled!')
+          }
+        }
+        else if (suffix.toLowerCase().split(' ')[0] == 'disable') { //Disable
+          if (servers[msg.guild.id].settings.logger.enable == true) {
+            msg.channel.sendMessage('Logger enabled!')
+            servers[msg.guild.id].settings.logger.enable = false
+            db.execute.servers_save.fn(servers)
+          }
+          else {
+            msg.channel.sendMessage('Oh ooh! You can not disable something that is already disabled!')
+          }
+        }
+        else if (suffix.toLowerCase().split(' ')[0] == 'set') { //Set
+          msg.channel.sendMessage('Logging channel set to: `' + msg.channel.id + '`!')
+          servers[msg.guild.id].settings.logger.channelId = msg.channel.id
+          db.execute.servers_save.fn(servers)
+        }
+        else {
+          msg.channel.sendMessage('Oh ooh! Something went wrong! Type `' + prefix + 'help logger` to see what you did wrong!')
+        }
+      }
+      else {
+        msg.channel.sendMessage('Oh ooh! Something went wrong! Type `' + prefix + 'help logger` to see what you did wrong!')
+      }
+    }
   }
 }
 
