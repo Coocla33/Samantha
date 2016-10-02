@@ -1,3 +1,5 @@
+[![Discord](https://discordapp.com/api/guilds/232091524492558336/embed.png)](https://www.discord.gg/nKCywwZ)
+
 ## Who *is* Samantha?
 Samantha is a **Discord Bot**, she is designed to make the life of a server easier *(Making it more fun for users, making managing easier for server staff etc)*!
 
