@@ -496,8 +496,8 @@ var cmds = {
     'desc': 'logging everything!',
     'usage': '<logger> [enable, disable, set]',
     'cooldown': 5000,
-    'master': true,
-    'admin': false,
+    'master': false,
+    'admin': true,
     fn: function(bot, msg, suffix) {
       if (suffix) {
         if (suffix.toLowerCase().split(' ')[0] == 'enable') { //Enable
@@ -532,6 +532,24 @@ var cmds = {
       else {
         msg.channel.sendMessage('Oh ooh! Something went wrong! Type `' + prefix + 'help logger` to see what you did wrong!')
       }
+    }
+  },
+  info: {
+    'name': 'info',
+    'desc': 'Just some standard info about Samantha!',
+    'usage': '<info>',
+    'cooldown': 5000,
+    'master': false,
+    'admin': false,
+    fn: function(bot, msg, suffix) {
+      var messageArray = []
+      messageArray.push('About: `Samantha is a discord bot, duhh... But samantha is designed to make the life of a user better! From the server staff to a simple user that just joined for fun.`')
+      messageArray.push('Version: `Fuck versions. I am just half finished`')
+      messageArray.push('Github: `https://github.com/Coocla33/Samantha`')
+      messageArray.push('Wiki: `https://github.com/Coocla33/Samantha/wiki`')
+      messageArray.push('Creator: `Coocla33#6115 (154923436831932416)`')
+      messageArray.push('Samantha Server: `https://www.discord.gg/nKCywwZ`')
+      msg.channel.sendMessage(messageArray)
     }
   }
 }

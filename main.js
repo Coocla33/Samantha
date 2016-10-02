@@ -130,7 +130,8 @@ bot.on('message', msg => {
 
 //Server join
 bot.on('guildCreate', (guild) => {
-  db.execute.server_create_object.fn(guild)
+  db.execute.update_servers.fn(bot)
+  db.execute.update_users.fn(bot)
   console.log(log_time() + log_info + 'Join the server <' + guild.name + '>!')
 })
 
@@ -142,34 +143,44 @@ bot.on('guildDelete', (guild) => {
 
 //User join
 bot.on('guildMemberAdd', (guild, member) => {
-  db.execute.log.fn(bot, member, guild.id, undefined, 'user_join')
+  db.execute.log.fn(bot, member, guild.id, undefined, undefined, undefined, undefined, 'user_join')
   db.execute.user_join.fn(guild, member)
 })
 
 //User leave
 bot.on('guildMemberRemove', (guild, member) => {
-  db.execute.log.fn(bot, member, guild.id, undefined, 'user_leave')
+  db.execute.log.fn(bot, member, guild.id, undefined, undefined, undefined, undefined, 'user_leave')
   db.execute.user_leave.fn(guild, member)
 })
 
 //Ban Add
 bot.on('guildBanAdd', (guild, user) => {
-  db.execute.log.fn(bot, user, guild.id, undefined, 'user_ban_add')
+  db.execute.log.fn(bot, user, guild.id, undefined, undefined, undefined, undefined, 'user_ban_add')
 })
 
 //Ban Remove
 bot.on('guildBanRemove', (guild, user) => {
-  db.execute.log.fn(bot, user, guild.id, undefined, 'user_ban_remove')
+  db.execute.log.fn(bot, user, guild.id, undefined, undefined, undefined, undefined, 'user_ban_remove')
 })
 
 //Channel Create
 bot.on('channelCreate', (channel) => {
-  db.execute.log.fn(bot, undefined, channel.guild.id, channel, 'channel_create')
+  db.execute.log.fn(bot, undefined, channel.guild.id, channel, undefined, undefined, undefined, 'channel_create')
 })
 
 //Channel Delete
 bot.on('channelDelete', (channel) => {
-  db.execute.log.fn(bot, undefined, channel.guild.id, channel, 'channel_delete')
+  db.execute.log.fn(bot, undefined, channel.guild.id, channel, undefined, undefined, undefined, 'channel_delete')
+})
+
+//Role Create
+bot.on('guildRoleCreate', (guild, role) => {
+  db.execute.log.fn(bot, undefined, guild.id, undefined, role, undefined, undefined, 'role_create')
+})
+
+//Role Delete
+bot.on('guildRoleDelete', (guild, role) => {
+  db.execute.log.fn(bot, undefined, guild.id, undefined, role, undefined, undefined, 'role_delete')
 })
 
 var cooldown = function(msg, cmdn) {
