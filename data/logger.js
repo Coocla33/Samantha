@@ -22,13 +22,23 @@ var log = {
     }
   },
   channel_create: {
-    fn:function(bot, channel, logChannel) {
+    fn: function(bot, channel, logChannel) {
       bot.channels.get(logChannel).sendMessage('`LOG` | `CHANNEL CREATED` | `' + channel.name + ' - ' + channel.id + ' - ' + channel.type + '`')
     }
   },
   channel_delete: {
-    fn:function(bot, channel, logChannel) {
+    fn: function(bot, channel, logChannel) {
       bot.channels.get(logChannel).sendMessage('`LOG` | `CHANNEL DELETED` | `' + channel.name + ' - ' + channel.id + ' - ' + channel.type + '`')
+    }
+  },
+  role_create: {
+    fn: function(bot, role, logChannel) {
+      bot.channels.get(logChannel).sendMessage('`LOG` | `ROLE CREATED` | `' + role.name + ' - ' + role.id + '`')
+    }
+  },
+  role_delete: {
+    fn: function(bot, role, logChannel) {
+      bot.channels.get(logChannel).sendMessage('`LOG` | `ROLE DELETED` | `' + role.name + ' - ' + role.id + '`')
     }
   }
 }

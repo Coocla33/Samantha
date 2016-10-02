@@ -91,6 +91,7 @@ var functions = {
   server_remove_object: {
     fn: function(server) {
       delete servers[server.id]
+      functions.servers_save.fn(servers)
     }
   },
   user_create_object: {
@@ -248,7 +249,7 @@ var functions = {
     }
   },
   log: {
-    fn: function(bot, user, guildId, channel, type) {
+    fn: function(bot, user, guildId, channel, role, oldRole, newRole, type) {
       if (servers[guildId].settings.logger.enable == true) {
         var logChannel = servers[guildId].settings.logger.channelId
         if (type == 'user_join') {
@@ -268,6 +269,12 @@ var functions = {
         }
         else if (type == 'channel_delete') {
           logger.execute.channel_delete.fn(bot, channel, logChannel)
+        }
+        else if (type == 'role_create') {
+          logger.execute.role_create.fn(bot, role, logChannel)
+        }
+        else if (type == 'role_delete') {
+          logger.execute.role_delete.fn(bot, role, logChannel)
         }
       }
       else {
