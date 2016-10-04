@@ -7,6 +7,9 @@ Samantha is a **Discord Bot**, she is designed to make the life of a server easi
 ## What *can* Samantha do?
 Samantha is designed to make the live of a server easier. At the moment Samantha can not do allot, it has a good working **Bot Admin** system and that allows the server owner *(The creator of the server)* to assign the **Bot Admin** rights for a certain user/users. There is also a **Achievement** system, this system encourages users to use the bot more to unlock secret achievements etc. There are allot more things planned for **Samantha**!
 
+##Donating...
+Donating  to **Samantha** is a thing you can do to support the devs of **Samantha**. The hosting of **Samantha** is NOT free, it costs around €10/month. If u donate you get into the big giant donation list of **Samantha**!
+
 ## Config.json
 ```json
 {
