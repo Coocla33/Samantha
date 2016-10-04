@@ -24,7 +24,7 @@ Donating  to **Samantha** is a thing you can do to support the devs of **Samanth
     "token": "" 
   },
   "perms": {
-    "master": "1234567890" 
+    "master": ["user_id1", "user_id2"] 
   },
   "useless": {
     "playing": ["This is a example!", "Mayby another example?", "You get how it works now..."] 
