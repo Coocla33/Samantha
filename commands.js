@@ -61,49 +61,39 @@ var cmds = {
           if (suffix.toLowerCase().split(' ')[1] == 'joinMessage') { //Enable JoinMessage
             if (servers[msg.guild.id].settings.joinMessage == true) {
               msg.channel.sendMessage('This setting is already set to be enabled!')
-            }
-            else {
+            } else {
               servers[msg.guild.id].settings.joinMessage = true
               msg.channel.sendMessage('Enabled joinMessage!')
             }
-          }
-          else if (suffix.toLowerCase().split(' ')[1] == 'leaveMessage') { //Enable LeaveMessage
+          } else if (suffix.toLowerCase().split(' ')[1] == 'leaveMessage') { //Enable LeaveMessage
             if (servers[msg.guild.id].settings.leaveMessage == true) {
               msg.channel.sendMessage('This setting is already set to be enabled!')
-            }
-            else {
+            } else {
               servers[msg.guild.id].settings.leaveMessage = true
               msg.channel.sendMessage('Enabled leaveMessage!')
             }
-          }
-          else {
+          } else {
            msg.channel.sendMessage('Oh ooh! Something went wrong! Type `' + prefix + 'help customize` to see what you did wrong!')
           }
-        }
-        else if (suffix.toLowerCase().split(' ')[0] == 'disable') { //Disable
+        } else if (suffix.toLowerCase().split(' ')[0] == 'disable') { //Disable
           if (suffix.toLowerCase().split(' ')[1] == 'joinMessage') { //Disable JoinMessage
             if (servers[msg.guild.id].settings.joinMessage == false) {
               msg.channel.sendMessage('This setting is already set to be disabled!')
-            }
-            else {
+            } else {
               servers[msg.guild.id].settings.joinMessage = false
               msg.channel.sendMessage('Disabled joinMessage!')
             }
-          }
-          else if (suffix.toLowerCase().split(' ')[1] == 'leaveMessage') { //Disable LeaveMessage
+          } else if (suffix.toLowerCase().split(' ')[1] == 'leaveMessage') { //Disable LeaveMessage
             if (servers[msg.guild.id].settings.leaveMessage == false) {
               msg.channel.sendMessage('This setting is already set to be disabled!')
-            }
-            else {
+            } else {
               servers[msg.guild.id].settings.leaveMessage = false
               msg.channel.sendMessage('Disabled leaveMessage!')
             }
-          }
-          else {
+          } else {
             msg.channel.sendMessage('Oh ooh! Something went wrong! Type `' + prefix + 'help customize` to see what you did wrong!')
           }
-        }
-        else if (suffix.toLowerCase().split(' ')[0] == 'set') { //Set
+        } else if (suffix.toLowerCase().split(' ')[0] == 'set') { //Set
           if (suffix.toLowerCase().split(' ')[1] == 'joinMessage') { //Setting JoinMessage
             if (servers[msg.guild.id].settings.joinMessage == true) {
               var message_split = suffix.split(' ')
@@ -111,40 +101,32 @@ var cmds = {
               if (message) {
                 servers[msg.guild.id].custom.join = message
                 msg.channel.sendMessage('Changed the join message to: `' + message + '`')
-              }
-              else {
+              } else {
                 msg.channel.sendMessage('Oh ooh! Something went wrong! Type `' + prefix + 'help customize` to see what you did wrong!')
               }
-            }
-            else {
+            } else {
               msg.channel.sendMessage('Oh ooh! Something went wrong! Are you sure you enabled the joinMessage? Type `' + prefix + 'help customize` to see how to enable it!')
             }
-          }
-          else if (suffix.toLowerCase().split(' ')[1] == 'leavemessage') { //Setting LeaveMessage
+          } else if (suffix.toLowerCase().split(' ')[1] == 'leavemessage') { //Setting LeaveMessage
             if (servers[msg.guild.id].settings.joinMessage == true) {
               var message_split = suffix.split(' ')
               message = message_split.splice(2, message_split.length).join(' ')
               if (message) {
                 servers[msg.guild.id].custom.leave = message
                 msg.channel.sendMessage('Changed the leave message to: `' + message + '`')
-              }
-              else {
+              } else {
                 msg.channel.sendMessage('Oh ooh! Something went wrong! Type `' + prefix + 'help customize` to see what you did wrong!')
               }
-            }
-            else {
+            } else {
               msg.channel.sendMessage('Oh ooh! Something went wrong! Are you sure you enabled the joinMessage? Type `' + prefix + 'help customize` to see how to enable it!')
             }
-          }
-          else {
+          } else {
             msg.channel.sendMessage('Oh ooh! Something went wrong! Type `' + prefix + 'help customize` to see what you did wrong!')
           }
-        }
-        else {
+        } else {
           msg.channel.sendMessage('Oh ooh! Something went wrong! Type `' + prefix + 'help customize` to see what you did wrong!')
         }
-      }
-      else {
+      } else {
         msg.channel.sendMessage('Oh ooh! Something went wrong! Type `' + prefix + 'help customize` to see what you did wrong!')
       }
       db.execute.servers_save.fn(servers) //Saving to Servers.json
@@ -174,13 +156,11 @@ var cmds = {
       if (msg.mentions.users.size >= 0) {
         if (servers[msg.guild.id].settings.admin.indexOf(msg.mentions.users.array()[0].id) > -1) {
           msg.channel.sendMessage('This person is already a Bot Admin!')
-        }
-        else {
+        } else {
           servers[msg.guild.id].settings.admin[servers[msg.guild.id].settings.admin.length] = msg.mentions.users.array()[0].id
           msg.channel.sendMessage('Added `' + msg.mentions.users.array()[0].username + '` to the admin list of this server!')
         }
-      }
-      else {
+      } else {
         msg.channel.sendMessage('Oh ooh! Something went wrong! Type `' + prefix + 'help addAdmin` to see what you did wrong!')
       }
       db.execute.servers_save.fn(servers) //Saving to Servers.json
@@ -203,17 +183,14 @@ var cmds = {
                 msg.channel.sendMessage('Removed `' + msg.mentions.users.array()[0].username + '` from the admin list of this server!')
               }
             }
-          }
-          else {
+          } else {
             msg.channel.sendMessage('You need to add this person to the Bot Admin list before you can remove them!')
           }
-        }
-        else {
+        } else {
           msg.channel.sendMessage('You can not remove the creator of the server creator!')
         }
       db.execute.servers_save.fn(servers) //Saving to Servers.json
-      }
-      else {
+      } else {
         msg.channel.sendMessage('Oh ooh! Something went wrong! Type `' + prefix + 'help addAdmin` to see what you did wrong!')
       }
     }
@@ -255,10 +232,9 @@ var cmds = {
     'admin': false,
     fn: function(bot, msg, suffix) {
       var msg_time = Date.now()
-			msg.channel.sendMessage('`Pong!` (Calculating...)')
-			.then(msg => {
-				msg.edit('`Pong!` (' + (Date.now() - msg_time + ' ms)'))
-			}).catch(console.error)
+      msg.channel.sendMessage('`Pong!` (Calculating...)').then(msg => {
+	msg.edit('`Pong!` (' + (Date.now() - msg_time + ' ms)'))
+      }).catch(console.error)
     }
   },
   eval: {
@@ -275,12 +251,10 @@ var cmds = {
           if (typeof result !== 'object') {
             msg.edit('```Result:\n' + result + '```')
           }
-        }
-        catch (err) {
+        } catch (err) {
           if (config.misc.debug == true) {
             msg.edit('```Result:\n' + err.stack + '```')
-          }
-          else {
+          } else {
             msg.edit('```Result:\n' + err + '```')
           }
         }
@@ -310,14 +284,12 @@ var cmds = {
       if (msg.mentions.users.size > 0) {
         if (blacklist[msg.mentions.users.array()[0].id]) {
           msg.channel.sendMessage('This person is already in the blacklist! Noob.')
-        }
-        else {
+        } else {
           msg.channel.sendMessage('Adding `' + msg.mentions.users.array()[0].username + '` to the blacklist!')
           blacklist[msg.mentions.users.array()[0].id] = {'date': new Date(), 'name': msg.mentions.users.array()[0].username}
           db.execute.blacklist_save.fn(blacklist)
         }
-      }
-      else {
+      } else {
         msg.channel.sendMessage('Oh ooh! Something went wrong! Type `' + prefix + 'help blacklist` to see what you did wrong!')
       }
     }
@@ -335,12 +307,10 @@ var cmds = {
           msg.channel.sendMessage('Removing `' + msg.mentions.users.array()[0].username + '` from the blacklist!')
           delete blacklist[msg.mentions.users.array()[0].id]
           db.execute.blacklist_save.fn(blacklist)
-        }
-        else {
+        } else {
           msg.channel.sendMessage('This person is not in the blacklist! So i can not remove him/her...')
         }
-      }
-      else {
+      } else {
         msg.channel.sendMessage('Oh ooh! Something went wrong! Type `' + prefix + 'help blacklist` to see what you did wrong!')
       }
     }
@@ -378,12 +348,10 @@ var cmds = {
           messageArray.push('`[' + membersWithRole.size  + ']`')
           messageArray.push('``' + membersWithRole.map(m => m.user.username).join('``, ``') + '``')
           msg.channel.sendMessage(messageArray)
-        }
-        else {
+        } else {
           msg.channel.sendMessage('Oh ooh! That role does not exist!')
         }
-      }
-      else {
+      } else {
         msg.channel.sendMessage('Oh ooh! Something went wrong! Type `' + prefix + 'help inrole` to see what you did wrong!')
       }
     }
@@ -399,20 +367,16 @@ var cmds = {
       if (msg.mentions.users.size > 0) {
         if (msg.mentions.users.array()[0].id == config.perms.master) {
           msg.channel.sendMessage('Sorry, i can not kill **' + msg.mentions.users.array()[0].username +  '** :(')
-        }
-        else {
+        } else {
           msg.channel.sendMessage('_Kills **' + msg.mentions.users.array()[0].username + '**_')
         }
-      }
-      else if (suffix) {
-        if (suffix == 'coocla33' || suffix == 'Coocla33' || suffix == 'samantha' || suffix == 'Samantha' || suffix == 'misha' || suffix == 'Misha') {
+      } else if (suffix) {
+        if (['coocla33', 'samantha', 'misha'].indexOf(suffix.toLowerCase()) > -1) {
           msg.channel.sendMessage('Sorry, i can not kill **' + suffix + '** :(')
-        }
-        else {
+        } else {
           msg.channel.sendMessage('_Kills **' + suffix + '**_')
         }
-      }
-      else {
+      } else {
         msg.channel.sendMessage('Oh ooh! Something went wrong! Type `' + prefix + 'help kill` to see what you did wrong!')
       }
     }
@@ -472,8 +436,7 @@ var cmds = {
         messageArray.push('Bot     : ' + msg.mentions.users.array()[0].bot)
         messageArray.push('Icon    : ' + avatarURL)
         messageArray.push('```')
-      }
-      else {
+      } else {
         var game = msg.author.game
         if (game == null) {game = 'No game here!'} else {game = msg.author.game.name}
         var avatarURL = msg.author.avatarURL
@@ -505,31 +468,25 @@ var cmds = {
             msg.channel.sendMessage('Logger enabled!')
             servers[msg.guild.id].settings.logger.enable = true
             db.execute.servers_save.fn(servers)
-          }
-          else {
+          } else {
             msg.channel.sendMessage('Oh ooh! You can not enable something that is already enabled!')
           }
-        }
-        else if (suffix.toLowerCase().split(' ')[0] == 'disable') { //Disable
+        } else if (suffix.toLowerCase().split(' ')[0] == 'disable') { //Disable
           if (servers[msg.guild.id].settings.logger.enable == true) {
             msg.channel.sendMessage('Logger enabled!')
             servers[msg.guild.id].settings.logger.enable = false
             db.execute.servers_save.fn(servers)
-          }
-          else {
+          } else {
             msg.channel.sendMessage('Oh ooh! You can not disable something that is already disabled!')
           }
-        }
-        else if (suffix.toLowerCase().split(' ')[0] == 'set') { //Set
+        } else if (suffix.toLowerCase().split(' ')[0] == 'set') { //Set
           msg.channel.sendMessage('Logging channel set to: `' + msg.channel.id + '`!')
           servers[msg.guild.id].settings.logger.channelId = msg.channel.id
           db.execute.servers_save.fn(servers)
-        }
-        else {
+        } else {
           msg.channel.sendMessage('Oh ooh! Something went wrong! Type `' + prefix + 'help logger` to see what you did wrong!')
         }
-      }
-      else {
+      } else {
         msg.channel.sendMessage('Oh ooh! Something went wrong! Type `' + prefix + 'help logger` to see what you did wrong!')
       }
     }
