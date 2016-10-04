@@ -48,15 +48,15 @@ bot.on('message', msg => {
   db.execute.checkAchievement.fn(users, msg)
   if (msg.content.startsWith(prefix)) {
     var base = msg.content.substr(prefix.length)
-		var stub = base.split(' ')
-		var name = stub[0].toLowerCase()
-		var suffix = base.substr(stub[0].length + 1)
+    var stub = base.split(' ')
+    var name = stub[0].toLowerCase()
+    var suffix = base.substr(stub[0].length + 1)
     try {
       if (!blacklist[msg.author.id]) {
         if (cmd.execute[name]) {
           if (users[msg.author.id]) {
             if (cmd.execute[name].master == true) { //Master Commands
-              if (msg.author.id == config.perms.master) {
+              if (config.perms.master.indexOf(msg.author.id) > -1) {
                 cmd.execute[name].fn(bot, msg, suffix)
                 db.execute.command_log.fn(name, msg)
                 users[msg.author.id].stats.commandsUsed += 1
@@ -85,43 +85,36 @@ bot.on('message', msg => {
                     db.execute.command_log.fn(name, msg)
                     users[msg.author.id].stats.commandsUsed += 1
                     cooldown(msg, name)
-                  }
-                  else {
+                  } else {
                     var wait = user_cooldown[msg.author.id][name].cooldown - new Date()
                     msg.channel.sendMessage('Oh ooh! You went to fast! Wait another `' + wait + 'ms` to use this command again!')
                   }
-                }
-                else {
+                } else {
                   cooldown(msg, name)
                   cmd.execute[name].fn(bot, msg, suffix)
                   db.execute.command_log.fn(name, msg)
                   users[msg.author.id].stats.commandsUsed += 1
                 }
-              }
-              else {
+              } else {
                 cooldown(msg, name)
                 cmd.execute[name].fn(bot, msg, suffix)
                 db.execute.command_log.fn(name, msg)
                 users[msg.author.id].stats.commandsUsed += 1
               }
             }
-          }
-          else {
+          } else {
             msg.channel.sendMessage('Generating user profile... Please try again!')
             db.execute.user_create_object.fn(msg.author)
           }
         }
-      }
-      else {
+      } else {
         //Nothing
       }
-    }
-    catch (err) {
+    } catch (err) {
       msg.channel.sendMessage('Oh ooh! Something went wrong! My master screwed something up... Please show this to him: `' + err + '`!')
       if (config.misc.debug == true) {
         console.log(log_time() + log_err + 'Command: ' + name + ' Error: ' + err.stack)
-      }
-      else {
+      } else {
         console.log(log_time() + log_err + 'Command: ' + name + ' Error: ' + err)
       }
     }
@@ -190,12 +183,10 @@ var cooldown = function(msg, cmdn) {
   if (user_cooldown[msg.author.id]) {
     if (user_cooldown[msg.author.id][cmdn]) {
       user_cooldown[msg.author.id][cmdn].cooldown = new_cooldown
-    }
-    else {
+    } else {
       user_cooldown[msg.author.id][cmdn] = {'cooldown': new_cooldown}
     }
-  }
-  else {
+  } else {
     user_cooldown[msg.author.id] = {[cmdn]: {'cooldown': new_cooldown}}
   }
 }

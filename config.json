@@ -10,7 +10,7 @@
     "token": ""
   },
   "perms": {
-    "master": ""
+    "master": []
   },
   "useless": {
     "playing": []
