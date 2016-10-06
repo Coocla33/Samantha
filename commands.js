@@ -228,7 +228,7 @@ var cmds = {
     'desc': 'Ping pong!',
     'usage': '<ping>',
     'cooldown': 5000,
-    'master': false,
+    'master': true,
     'admin': false,
     fn: function(bot, msg, suffix) {
       var msg_time = Date.now()
