@@ -181,6 +181,11 @@ bot.on('messageDelete', (msg) => {
   db.execute.log.fn(bot, undefined, msg.guild.id, undefined, undefined, undefined, undefined, msg, 'message_delete')
 })
 
+//Message edit
+bot.on('messageUpdate', (oldMessage, newMessage) => {
+  db.execute.log.fn(bot, undefined, newMessage.guild.id, undefined, undefined, oldMessage, newMessage, undefined, 'message_update')
+})
+
 var cooldown = function(msg, cmdn) {
   var date = new Date()
   var new_cooldown = new Date(date.getTime() + cmd.execute[cmdn].cooldown)
