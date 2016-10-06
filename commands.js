@@ -233,7 +233,7 @@ var cmds = {
     fn: function(bot, msg, suffix) {
       var msg_time = Date.now()
       msg.channel.sendMessage('`Pong!` (Calculating...)').then(msg => {
-	msg.edit('`Pong!` (' + (Date.now() - msg_time + ' ms)'))
+	      msg.edit('`Pong!` (' + (Date.now() - msg_time + ' ms)'))
       }).catch(console.error)
     }
   },
