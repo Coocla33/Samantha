@@ -58,14 +58,14 @@ var cmds = {
     fn: function(bot, msg, suffix) {
       if (suffix) {
         if (suffix.toLowerCase().split(' ')[0] == 'enable') { //Enable
-          if (suffix.toLowerCase().split(' ')[1] == 'joinMessage') { //Enable JoinMessage
+          if (suffix.toLowerCase().split(' ')[1] == 'joinmessage') { //Enable JoinMessage
             if (servers[msg.guild.id].settings.joinMessage == true) {
               msg.channel.sendMessage('This setting is already set to be enabled!')
             } else {
               servers[msg.guild.id].settings.joinMessage = true
               msg.channel.sendMessage('Enabled joinMessage!')
             }
-          } else if (suffix.toLowerCase().split(' ')[1] == 'leaveMessage') { //Enable LeaveMessage
+          } else if (suffix.toLowerCase().split(' ')[1] == 'leavemessage') { //Enable LeaveMessage
             if (servers[msg.guild.id].settings.leaveMessage == true) {
               msg.channel.sendMessage('This setting is already set to be enabled!')
             } else {
@@ -76,14 +76,14 @@ var cmds = {
            msg.channel.sendMessage('Oh ooh! Something went wrong! Type `' + prefix + 'help customize` to see what you did wrong!')
           }
         } else if (suffix.toLowerCase().split(' ')[0] == 'disable') { //Disable
-          if (suffix.toLowerCase().split(' ')[1] == 'joinMessage') { //Disable JoinMessage
+          if (suffix.toLowerCase().split(' ')[1] == 'joinmessage') { //Disable JoinMessage
             if (servers[msg.guild.id].settings.joinMessage == false) {
               msg.channel.sendMessage('This setting is already set to be disabled!')
             } else {
               servers[msg.guild.id].settings.joinMessage = false
               msg.channel.sendMessage('Disabled joinMessage!')
             }
-          } else if (suffix.toLowerCase().split(' ')[1] == 'leaveMessage') { //Disable LeaveMessage
+          } else if (suffix.toLowerCase().split(' ')[1] == 'leavemessage') { //Disable LeaveMessage
             if (servers[msg.guild.id].settings.leaveMessage == false) {
               msg.channel.sendMessage('This setting is already set to be disabled!')
             } else {
@@ -94,7 +94,7 @@ var cmds = {
             msg.channel.sendMessage('Oh ooh! Something went wrong! Type `' + prefix + 'help customize` to see what you did wrong!')
           }
         } else if (suffix.toLowerCase().split(' ')[0] == 'set') { //Set
-          if (suffix.toLowerCase().split(' ')[1] == 'joinMessage') { //Setting JoinMessage
+          if (suffix.toLowerCase().split(' ')[1] == 'joinmessage') { //Setting JoinMessage
             if (servers[msg.guild.id].settings.joinMessage == true) {
               var message_split = suffix.split(' ')
               message = message_split.splice(2, message_split.length).join(' ')
@@ -233,7 +233,7 @@ var cmds = {
     fn: function(bot, msg, suffix) {
       var msg_time = Date.now()
       msg.channel.sendMessage('`Pong!` (Calculating...)').then(msg => {
-	msg.edit('`Pong!` (' + (Date.now() - msg_time + ' ms)'))
+	      msg.edit('`Pong!` (' + (Date.now() - msg_time + ' ms)'))
       }).catch(console.error)
     }
   },
@@ -506,7 +506,33 @@ var cmds = {
       messageArray.push('Wiki: `https://github.com/Coocla33/Samantha/wiki`')
       messageArray.push('Creator: `Coocla33#6115 (154923436831932416)`')
       messageArray.push('Samantha Server: `https://www.discord.gg/nKCywwZ`')
+      messageArray.push('Disclaimer: `Atm i am a private bot only allowed in certain servers for testing, i will become public eventually...`')
       msg.channel.sendMessage(messageArray)
+    }
+  },
+  rate: {
+    'name': 'rate',
+    'desc': 'I litterly rate everything!',
+    'usage': '<rate> [custom_text]',
+    'cooldown': 5000,
+    'master': false,
+    'admin': false,
+    fn: function(bot, msg, suffix) {
+      var random = Math.floor((Math.random() * 10) + 1)
+      if (suffix.toLowerCase() == 'samantha') {
+        msg.channel.sendMessage('I rate `myself` 11/10! :heart:  :sparkles:')
+      }
+      else if (suffix.toLowerCase() == 'coocla33' || suffix.toLowerCase() == 'misha') {
+        msg.channel.sendMessage('I rate `' + suffix + '` over 9000!')
+      }
+      else {
+        if (random == 5) {
+          msg.channel.sendMessage('I rate `' + suffix + '` 5/7!')
+        }
+        else {
+          msg.channel.sendMessage('I rate `' + suffix + '` ' + random + '/10!')
+        }
+      }
     }
   }
 }

@@ -30,3 +30,4 @@ Samantha is designed to make the live of a server easier. At the moment Samantha
 
 
 **Disclaimer** *The bot is open source but you are not allowed to copy it and use it!*
+

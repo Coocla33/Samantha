@@ -45,7 +45,6 @@ bot.on('ready', () => {
 
 //Command Execution
 bot.on('message', msg => {
-  db.execute.checkAchievement.fn(users, msg)
   if (msg.content.startsWith(prefix)) {
     var base = msg.content.substr(prefix.length)
     var stub = base.split(' ')
@@ -55,6 +54,7 @@ bot.on('message', msg => {
       if (!blacklist[msg.author.id]) {
         if (cmd.execute[name]) {
           if (users[msg.author.id]) {
+            db.execute.checkAchievement.fn(users, msg)
             if (cmd.execute[name].master == true) { //Master Commands
               if (config.perms.master.indexOf(msg.author.id) > -1) {
                 cmd.execute[name].fn(bot, msg, suffix)
