@@ -49,6 +49,12 @@ var log = {
       var time = db.execute.get_time.fn(new Date())
       bot.channels.get(logChannel).sendMessage('`' + time + '` - `Role Delete` - Name: `' + role.name + '` Id: `' + role.id + '`')
     }
+  },
+  message_delete: {
+    fn: function(bot, msg, logChannel) {
+      var time = db.execute.get_time.fn(new Date())
+      bot.channels.get(logChannel).sendMessage('`' + time + '` - `Message Delete` - Message: `' + msg.content + '` Author: `' + msg.author.username + '`')
+    }
   }
 }
 
