@@ -1,14 +1,10 @@
 [![Discord](https://discordapp.com/api/guilds/232091524492558336/embed.png)](https://www.discord.gg/nKCywwZ)
-[![Donate](https://img.shields.io/badge/Donate-Here-blue.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=BBSPET8DQ2P84)
 
 ## Who *is* Samantha?
 Samantha is a **Discord Bot**, she is designed to make the life of a server easier *(Making it more fun for users, making managing easier for server staff etc)*!
 
 ## What *can* Samantha do?
 Samantha is designed to make the live of a server easier. At the moment Samantha can not do a lot, it has a good working **Bot Admin** system and that allows the server owner *(The creator of the server)* to assign the **Bot Admin** rights for a certain user/users. There is also a **Achievement** system, this system encourages users to use the bot more to unlock secret achievements etc. There are allot more things planned for **Samantha**!
-
-##Donating...
-Donating  to **Samantha** is a thing you can do to support the devs of **Samantha**. The hosting of **Samantha** is NOT free, it costs around €10/month. If u donate you get into the big giant donation list of **Samantha**!
 
 ## Config.json
 ```json
