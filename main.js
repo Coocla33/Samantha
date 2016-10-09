@@ -13,6 +13,7 @@ var prefix = config.misc.prefix
 var user_cooldown = {}
 
 var log_info = chalk.bold.green('INFO: ')
+var log_bot = chalk.bold.magenta('BOT: ')
 var log_warn = chalk.bold.yellow('WARNING: ')
 var log_err = chalk.bold.red('ERROR: ')
 var log_time = function() {
@@ -27,18 +28,17 @@ var log_time = function() {
 }
 
 //Startup Sequence
-console.log(log_time() + log_info + 'Starting up ' + config.misc.bot_name + '!')
+console.log(log_time() + log_bot + 'Starting up ' + config.misc.bot_name + '!')
 var startup = new Date()
 bot.on('ready', () => {
   var startup_done = new Date() - startup
-  console.log(log_time() + log_info + config.misc.bot_name + ' started up! (' + startup_done + 'ms)')
-  console.log(log_time() + log_info + 'Servers  | ' + bot.guilds.size)
-  console.log(log_time() + log_info + 'Users    | ' + bot.users.size)
-  console.log(log_time() + log_info + 'Channels | ' + bot.channels.size)
-  console.log(log_time() + log_info + 'Started auto saving!')
+  console.log(log_time() + log_bot + config.misc.bot_name + ' started up! (' + startup_done + 'ms)')
+  console.log(log_time() + log_bot + 'Servers  | ' + bot.guilds.size)
+  console.log(log_time() + log_bot + 'Users    | ' + bot.users.size)
+  console.log(log_time() + log_bot + 'Channels | ' + bot.channels.size)
+  console.log(log_time() + log_bot + 'Started auto saving!')
   db.execute.save_auto.fn(servers, users, blacklist)
   db.execute.status_set_auto.fn(bot)
-  console.log(log_time() + log_info + 'Updating all servers!')
   db.execute.update_servers.fn(bot)
   db.execute.update_users.fn(bot)
 })
@@ -125,25 +125,28 @@ bot.on('message', msg => {
 bot.on('guildCreate', (guild) => {
   db.execute.update_servers.fn(bot)
   db.execute.update_users.fn(bot)
-  console.log(log_time() + log_info + 'Join the server <' + guild.name + '>!')
+  console.log(log_time() + log_bot + 'Join the server <' + guild.name + '>!')
 })
 
 //Server leave
 bot.on('guildDelete', (guild) => {
   db.execute.server_remove_object.fn(guild)
-  console.log(log_time() + log_info + 'Left the server <' + guild.name + '>!')
+  db.execute.update_users.fn(bot)
+  console.log(log_time() + log_bot + 'Left the server <' + guild.name + '>!')
 })
 
 //User join
 bot.on('guildMemberAdd', (guild, member) => {
   db.execute.log.fn(bot, member, guild.id, undefined, undefined, undefined, undefined, undefined, 'user_join')
   db.execute.user_join.fn(guild, member)
+  db.execute.update_users.fn(bot)
 })
 
 //User leave
 bot.on('guildMemberRemove', (guild, member) => {
   db.execute.log.fn(bot, member, guild.id, undefined, undefined, undefined, undefined, undefined, 'user_leave')
   db.execute.user_leave.fn(guild, member)
+  db.execute.update_users.fn(bot)
 })
 
 //Ban Add
