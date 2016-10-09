@@ -249,7 +249,7 @@ var functions = {
     }
   },
   log: {
-    fn: function(bot, user, guildId, channel, role, oldRole, newRole, type) {
+    fn: function(bot, user, guildId, channel, role, oldMessage, newMessage, msg, type) {
       if (servers[guildId].settings.logger.enable == true) {
         var logChannel = servers[guildId].settings.logger.channelId
         if (type == 'user_join') {
@@ -275,6 +275,12 @@ var functions = {
         }
         else if (type == 'role_delete') {
           logger.execute.role_delete.fn(bot, role, logChannel)
+        }
+        else if (type == 'message_delete') {
+          logger.execute.message_delete.fn(bot, msg, logChannel)
+        }
+        else if (type == 'message_update') {
+          logger.execute.message_update.fn(bot, oldMessage, newMessage, logChannel)
         }
       }
       else {
