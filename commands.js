@@ -27,8 +27,9 @@ var cmds = {
     'admin': false,
     fn: function(bot, msg, suffix) {
       var messageArray = []
-      messageArray.push('Commands:')
-      messageArray.push(db.execute.get_commands.fn(msg))
+      var commandAmount = db.execute.get_commands.fn(msg, 'amount')
+      messageArray.push('`[' + commandAmount + ']`')
+      messageArray.push(db.execute.get_commands.fn(msg, 'list'))
       msg.channel.sendMessage(messageArray)
     }
   },
@@ -259,18 +260,6 @@ var cmds = {
           }
         }
       })
-    }
-  },
-  uptime: {
-    'name': 'uptime',
-    'desc': 'The uptime of the bot!',
-    'usage': '<uptime>',
-    'cooldown': 5000,
-    'master': true,
-    'admin': false,
-    fn: function(bot, msg, suffix) {
-      var uptime = db.execute.uptime.fn(bot.uptime / 1000)
-      msg.channel.sendMessage('Uptime: ' + uptime.hour + ':' + uptime.min + ':' + uptime.sec)
     }
   },
   blacklist: {
@@ -533,6 +522,61 @@ var cmds = {
           msg.channel.sendMessage('I rate `' + suffix + '` ' + random + '/10!')
         }
       }
+    }
+  },
+  topservers: {
+    'name': 'topServers',
+    'desc': 'Showing the 10 biggest servers that i am in!',
+    'usage': '<topservers>',
+    'cooldown': 5000,
+    'master': false,
+    'admin': false,
+    fn: function(bot, msg, suffix) {
+      var mappedGuilds = []
+      var final = []
+      bot.guilds.forEach((guild) => {
+        mappedGuilds.push({id: guild.id, memberCount: guild.memberCount})
+      })
+      mappedGuilds = mappedGuilds.sort(function(a, b) {return a.memberCount - b.memberCount}).reverse()
+      for (var i = 0; i < 5; i++) {
+        final.push('`[' + (i + 1) + ']` **' + bot.guilds.get(mappedGuilds[i].id).name + '** - *' + bot.guilds.get(mappedGuilds[i].id).memberCount + ' Members*')
+      }
+      msg.channel.sendMessage(final)
+    }
+  },
+  say: {
+    'name': 'say',
+    'desc': 'Saying stuff',
+    'usage': '<say> [suffix]',
+    'cooldown': 5000,
+    'master': true,
+    'admin': false,
+    fn: function(bot, msg, suffix) {
+      msg.channel.sendMessage(suffix)
+    }
+  },
+  botinfo: {
+    'name': 'botInfo',
+    'desc': 'Showing all the bot information!',
+    'usage': '<botinfo>',
+    'cooldown': 5000,
+    'master': false,
+    'admin': false,
+    fn: function(bot, msg, suffix) {
+      var messageArray = []
+      var uptime = db.execute.uptime.fn(bot.uptime / 1000)
+      messageArray.push('```')
+      messageArray.push('Name     : ' + bot.user.username + '#' + bot.user.discriminator)
+      messageArray.push('Id       : ' + bot.user.id)
+      messageArray.push('Channels : ' + bot.channels.size)
+      messageArray.push('Guilds   : ' + bot.guilds.size)
+      messageArray.push('Users    : ' + bot.users.size)
+      messageArray.push('Uptime   : ' + uptime.hour + ':' + uptime.min + ':' + uptime.sec + ' (Hour : Min : Sec)')
+      messageArray.push()
+      messageArray.push()
+      messageArray.push()
+      messageArray.push('```')
+      msg.channel.sendMessage(messageArray)
     }
   }
 }
