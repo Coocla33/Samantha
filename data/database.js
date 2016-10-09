@@ -11,6 +11,7 @@ const chalk = require('chalk')
 var prefix = config.misc.prefix
 
 var log_info = chalk.bold.green('INFO: ')
+var log_bot = chalk.bold.magenta('BOT: ')
 var log_warn = chalk.bold.yellow('WARNING: ')
 var log_err = chalk.bold.red('ERROR: ')
 var log_time = function() {
@@ -26,24 +27,33 @@ var log_time = function() {
 
 var functions = {
   get_commands: {
-    fn: function(msg) {
+    fn: function(msg, type) {
     	var cmdArray = []
+      var cmdAmount = 0
     	for (var i in cmd.execute) {
         if (cmd.execute[i].master == true) {
           if (msg.author.id == config.perms.master) {
             cmdArray.push(cmd.execute[i].name)
+            cmdAmount = cmdAmount + 1
           }
         }
         else if (cmd.execute[i].admin == true) {
           if (servers[msg.guild.id].settings.admin.indexOf(msg.author.id) > -1) {
             cmdArray.push(cmd.execute[i].name)
+            cmdAmount = cmdAmount + 1
           }
         }
         else {
           cmdArray.push(cmd.execute[i].name)
+          cmdAmount = cmdAmount + 1
         }
       }
-      return '``' + cmdArray.sort().join('``, ``') + '``'
+      if (type == 'amount') {
+        return cmdAmount
+      }
+      else if (type == 'list') {
+        return '``' + cmdArray.sort().join('``, ``') + '``'
+      }
     }
   },
   get_help: {
@@ -156,7 +166,7 @@ var functions = {
   },
   save_auto: {
     fn: function(servers, users, blacklist) {
-      console.log(log_time() + log_info + 'Server/User/Blacklist database saved!')
+      console.log(log_time() + log_bot + 'Server/User/Blacklist database saved!')
       functions.servers_save.fn(servers)
       functions.users_save.fn(users)
       functions.blacklist_save.fn(blacklist)
@@ -174,7 +184,7 @@ var functions = {
     fn: function(bot) {
       var status = Math.floor(Math.random() * config.useless.playing.length)
       bot.user.setStatus('online', config.useless.playing[status])
-      console.log(log_time() + log_info + 'Changed status to <' + config.useless.playing[status] + '>')
+      console.log(log_time() + log_bot + 'Changed status to <' + config.useless.playing[status] + '>')
       setTimeout(() => {
         functions.status_set_auto.fn(bot)
       }, config.misc.autostatus)
@@ -192,7 +202,7 @@ var functions = {
           functions.server_create_object.fn(bot.guilds.array()[i])
         }
       }
-      console.log(log_time() + log_info + 'Updated ' + amount + ' servers!')
+      console.log(log_time() + log_bot + 'Updated ' + amount + ' servers!')
     }
   },
   update_users: {
@@ -207,7 +217,7 @@ var functions = {
           functions.user_create_object.fn(bot.users.array()[i])
         }
       }
-      console.log(log_time() + log_info + 'Updated ' + amount + ' users!')
+      console.log(log_time() + log_bot + 'Updated ' + amount + ' users!')
     }
   },
   getAchievement: {
@@ -250,41 +260,46 @@ var functions = {
   },
   log: {
     fn: function(bot, user, guildId, channel, role, oldMessage, newMessage, msg, type) {
-      if (servers[guildId].settings.logger.enable == true) {
-        var logChannel = servers[guildId].settings.logger.channelId
-        if (type == 'user_join') {
-          logger.execute.user_join.fn(bot, user, logChannel)
+      if (servers[guildId]) {
+        if (servers[guildId].settings.logger.enable == true) {
+          var logChannel = servers[guildId].settings.logger.channelId
+          if (type == 'user_join') {
+            logger.execute.user_join.fn(bot, user, logChannel)
+          }
+          else if (type == 'user_leave') {
+            logger.execute.user_leave.fn(bot, user, logChannel)
+          }
+          else if (type == 'user_ban_add') {
+            logger.execute.user_ban_add.fn(bot, user, logChannel)
+          }
+          else if (type == 'user_ban_remove') {
+            logger.execute.user_ban_remove.fn(bot, user, logChannel)
+          }
+          else if (type == 'channel_create') {
+            logger.execute.channel_create.fn(bot, channel, logChannel)
+          }
+          else if (type == 'channel_delete') {
+            logger.execute.channel_delete.fn(bot, channel, logChannel)
+          }
+          else if (type == 'role_create') {
+            logger.execute.role_create.fn(bot, role, logChannel)
+          }
+          else if (type == 'role_delete') {
+            logger.execute.role_delete.fn(bot, role, logChannel)
+          }
+          else if (type == 'message_delete') {
+            logger.execute.message_delete.fn(bot, msg, logChannel)
+          }
+          else if (type == 'message_update') {
+            logger.execute.message_update.fn(bot, oldMessage, newMessage, logChannel)
+          }
         }
-        else if (type == 'user_leave') {
-          logger.execute.user_leave.fn(bot, user, logChannel)
-        }
-        else if (type == 'user_ban_add') {
-          logger.execute.user_ban_add.fn(bot, user, logChannel)
-        }
-        else if (type == 'user_ban_remove') {
-          logger.execute.user_ban_remove.fn(bot, user, logChannel)
-        }
-        else if (type == 'channel_create') {
-          logger.execute.channel_create.fn(bot, channel, logChannel)
-        }
-        else if (type == 'channel_delete') {
-          logger.execute.channel_delete.fn(bot, channel, logChannel)
-        }
-        else if (type == 'role_create') {
-          logger.execute.role_create.fn(bot, role, logChannel)
-        }
-        else if (type == 'role_delete') {
-          logger.execute.role_delete.fn(bot, role, logChannel)
-        }
-        else if (type == 'message_delete') {
-          logger.execute.message_delete.fn(bot, msg, logChannel)
-        }
-        else if (type == 'message_update') {
-          logger.execute.message_update.fn(bot, oldMessage, newMessage, logChannel)
+        else {
+          //Nothing
         }
       }
       else {
-        //Nothing
+        functions.update_servers.fn(bot)
       }
     }
   },
