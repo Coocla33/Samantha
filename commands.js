@@ -527,7 +527,7 @@ var cmds = {
   topservers: {
     'name': 'topServers',
     'desc': 'Showing the 10 biggest servers that i am in!',
-    'usage': '<topservers>',
+    'usage': '<topservers> [amount_number]',
     'cooldown': 5000,
     'master': false,
     'admin': false,
@@ -538,8 +538,30 @@ var cmds = {
         mappedGuilds.push({id: guild.id, memberCount: guild.memberCount})
       })
       mappedGuilds = mappedGuilds.sort(function(a, b) {return a.memberCount - b.memberCount}).reverse()
-      for (var i = 0; i < 5; i++) {
-        final.push('`[' + (i + 1) + ']` **' + bot.guilds.get(mappedGuilds[i].id).name + '** - *' + bot.guilds.get(mappedGuilds[i].id).memberCount + ' Members*')
+      if (suffix) {
+        if (isNaN(suffix)) {
+          msg.channel.sendMessage('Oh ooh! Something went wrong! Type `' + prefix + 'help topservers` to see what you did wrong!')
+        }
+        else {
+          if (suffix <= 20) {
+            for (var i = 0; i < suffix; i++) {
+              if (mappedGuilds[i]) {
+                final.push('`[' + (i + 1) + ']` **' + bot.guilds.get(mappedGuilds[i].id).name + '** - *' + bot.guilds.get(mappedGuilds[i].id).memberCount + ' Members*')
+              }
+              else {
+                final.push('`[' + (i + 1) + ']` Not enough servers...')
+              }
+            }
+          }
+          else {
+            msg.channel.sendMessage('The maximum amount of servers to show is `20`!')
+          }
+        }
+      }
+      else {
+        for (var i = 0; i < 5; i++) {
+          final.push('`[' + (i + 1) + ']` **' + bot.guilds.get(mappedGuilds[i].id).name + '** - *' + bot.guilds.get(mappedGuilds[i].id).memberCount + ' Members*')
+        }
       }
       msg.channel.sendMessage(final)
     }
