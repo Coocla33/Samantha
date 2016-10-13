@@ -213,7 +213,7 @@ var functions = {
           functions.server_create_object.fn(bot.guilds.array()[i])
         }
       }
-      console.log(log_time() + log_bot + 'Updated ' + amount + ' servers!')
+      console.log(log_time() + log_bot + 'Updated ' + amount + ' server(s)!')
     }
   },
   update_users: {
@@ -228,7 +228,7 @@ var functions = {
           functions.user_create_object.fn(bot.users.array()[i])
         }
       }
-      console.log(log_time() + log_bot + 'Updated ' + amount + ' users!')
+      console.log(log_time() + log_bot + 'Updated ' + amount + ' user(s)!')
     }
   },
   getAchievement: {
@@ -311,6 +311,7 @@ var functions = {
       }
       else {
         functions.update_servers.fn(bot)
+        functions.server_create_object.fn(bot.guilds.get(guildId))
       }
     }
   },

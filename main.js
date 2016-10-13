@@ -140,7 +140,7 @@ bot.on('message', msg => {
 bot.on('guildCreate', (guild) => {
   db.execute.update_servers.fn(bot)
   db.execute.update_users.fn(bot)
-  console.log(log_time() + log_bot + 'Join the server <' + guild.name + '>!')
+  console.log(log_time() + log_bot + 'Joined the server <' + guild.name + '>!')
 })
 
 //Server leave
@@ -176,7 +176,7 @@ bot.on('guildBanRemove', (guild, user) => {
 
 //Channel Create
 bot.on('channelCreate', (channel) => {
-  if (channel.type == 'text') {
+  if (channel.type == 'text' || channel.tpye == 'voice') {
     db.execute.log.fn(bot, undefined, channel.guild.id, channel, undefined, undefined, undefined, undefined, 'channel_create')
   }
 })
