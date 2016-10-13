@@ -46,77 +46,92 @@ bot.on('ready', () => {
 //Command Execution
 bot.on('message', msg => {
   if (msg.content.startsWith(prefix)) {
-    var base = msg.content.substr(prefix.length)
-    var stub = base.split(' ')
-    var name = stub[0].toLowerCase()
-    var suffix = base.substr(stub[0].length + 1)
-    try {
-      if (!blacklist[msg.author.id]) {
-        if (cmd.execute[name]) {
-          if (users[msg.author.id]) {
-            db.execute.checkAchievement.fn(users, msg)
-            if (cmd.execute[name].master == true) { //Master Commands
-              if (config.perms.master.indexOf(msg.author.id) > -1) {
-                cmd.execute[name].fn(bot, msg, suffix)
-                db.execute.command_log.fn(name, msg)
-                users[msg.author.id].stats.commandsUsed += 1
-                cooldown(msg, name)
-              }
-              else {
-                msg.channel.sendMessage('Oh ooh! Something went wrong! Are you sure you are allowed to use this command? You can type `' + prefix + 'commands` to see a full list of all the commands you may use!')
-              }
-            }
-            else if (cmd.execute[name].admin == true) { //Admin Commands
-              if (servers[msg.guild.id].settings.admin.indexOf(msg.author.id) > -1) {
-                cmd.execute[name].fn(bot, msg, suffix)
-                db.execute.command_log.fn(name, msg)
-                users[msg.author.id].stats.commandsUsed += 1
-                cooldown(msg, name)
-              }
-              else {
-                msg.channel.sendMessage('Oh ooh! Something went wrong! Are you sure you are allowed to use this command? You can type `' + prefix + 'commands` to see a full list of all the commands you may use!')
-              }
-            }
-            else { //Default Commands
-              if (user_cooldown[msg.author.id]) {
-                if (user_cooldown[msg.author.id][name]) {
-                  if (user_cooldown[msg.author.id][name].cooldown < new Date()) {
+    if (msg.channel.type == 'text') {
+      if (msg.author.bot == false) {
+        if (msg.channel.permissionsFor(bot.user).hasPermission('SEND_MESSAGES')) {
+          var base = msg.content.substr(prefix.length)
+          var stub = base.split(' ')
+          var name = stub[0].toLowerCase()
+          var suffix = base.substr(stub[0].length + 1)
+          try {
+            if (!blacklist[msg.author.id]) {
+              if (cmd.execute[name]) {
+                if (users[msg.author.id]) {
+                  db.execute.checkAchievement.fn(users, msg)
+                  if (config.perms.master.indexOf(msg.author.id) > -1) { //Master Commands And everything else for master only so bypassing cooldown
                     cmd.execute[name].fn(bot, msg, suffix)
                     db.execute.command_log.fn(name, msg)
                     users[msg.author.id].stats.commandsUsed += 1
                     cooldown(msg, name)
-                  } else {
-                    var wait = user_cooldown[msg.author.id][name].cooldown - new Date()
-                    msg.channel.sendMessage('Oh ooh! You went to fast! Wait another `' + wait + 'ms` to use this command again!')
+                  }
+                  else if (cmd.execute[name].master == true) { //Master Commands
+                    if (config.perms.master.indexOf(msg.author.id) > -1) {
+                      cmd.execute[name].fn(bot, msg, suffix)
+                      db.execute.command_log.fn(name, msg)
+                      users[msg.author.id].stats.commandsUsed += 1
+                      cooldown(msg, name)
+                    }
+                    else {
+                      msg.channel.sendMessage('Oh ooh! Something went wrong! Are you sure you are allowed to use this command? You can type `' + prefix + 'commands` to see a full list of all the commands you may use!')
+                    }
+                  }
+                  else if (cmd.execute[name].admin == true) { //Admin Commands
+                    if (servers[msg.guild.id].settings.admin.indexOf(msg.author.id) > -1) {
+                      cmd.execute[name].fn(bot, msg, suffix)
+                      db.execute.command_log.fn(name, msg)
+                      users[msg.author.id].stats.commandsUsed += 1
+                      cooldown(msg, name)
+                    }
+                    else {
+                      msg.channel.sendMessage('Oh ooh! Something went wrong! Are you sure you are allowed to use this command? You can type `' + prefix + 'commands` to see a full list of all the commands you may use!')
+                    }
+                  }
+                  else { //Default Commands
+                    if (user_cooldown[msg.author.id]) {
+                      if (user_cooldown[msg.author.id][name]) {
+                        if (user_cooldown[msg.author.id][name].cooldown < new Date()) {
+                          cmd.execute[name].fn(bot, msg, suffix)
+                          db.execute.command_log.fn(name, msg)
+                          users[msg.author.id].stats.commandsUsed += 1
+                          cooldown(msg, name)
+                        } else {
+                          var wait = user_cooldown[msg.author.id][name].cooldown - new Date()
+                          msg.channel.sendMessage('Oh ooh! You went to fast! Wait another `' + wait + 'ms` to use this command again!')
+                        }
+                      } else {
+                        cooldown(msg, name)
+                        cmd.execute[name].fn(bot, msg, suffix)
+                        db.execute.command_log.fn(name, msg)
+                        users[msg.author.id].stats.commandsUsed += 1
+                      }
+                    } else {
+                      cooldown(msg, name)
+                      cmd.execute[name].fn(bot, msg, suffix)
+                      db.execute.command_log.fn(name, msg)
+                      users[msg.author.id].stats.commandsUsed += 1
+                    }
                   }
                 } else {
-                  cooldown(msg, name)
-                  cmd.execute[name].fn(bot, msg, suffix)
-                  db.execute.command_log.fn(name, msg)
-                  users[msg.author.id].stats.commandsUsed += 1
+                  msg.channel.sendMessage('Generating user profile... Please try again!')
+                  db.execute.user_create_object.fn(msg.author)
                 }
-              } else {
-                cooldown(msg, name)
-                cmd.execute[name].fn(bot, msg, suffix)
-                db.execute.command_log.fn(name, msg)
-                users[msg.author.id].stats.commandsUsed += 1
               }
+            } else {
+              //Nothing
             }
-          } else {
-            msg.channel.sendMessage('Generating user profile... Please try again!')
-            db.execute.user_create_object.fn(msg.author)
+          } catch (err) {
+            msg.channel.sendMessage('Oh ooh! Something went wrong! My master screwed something up... Please show this to him: `' + err + '`!')
+            if (config.misc.debug == true) {
+              console.log(log_time() + log_err + 'Command: ' + name + ' Error: ' + err.stack)
+            } else {
+              console.log(log_time() + log_err + 'Command: ' + name + ' Error: ' + err)
+            }
           }
         }
-      } else {
-        //Nothing
       }
-    } catch (err) {
-      msg.channel.sendMessage('Oh ooh! Something went wrong! My master screwed something up... Please show this to him: `' + err + '`!')
-      if (config.misc.debug == true) {
-        console.log(log_time() + log_err + 'Command: ' + name + ' Error: ' + err.stack)
-      } else {
-        console.log(log_time() + log_err + 'Command: ' + name + ' Error: ' + err)
-      }
+    }
+    else {
+      msg.channel.sendMessage('I am sorry, but i do not work in private channels!')
     }
   }
 })
@@ -161,7 +176,9 @@ bot.on('guildBanRemove', (guild, user) => {
 
 //Channel Create
 bot.on('channelCreate', (channel) => {
-  db.execute.log.fn(bot, undefined, channel.guild.id, channel, undefined, undefined, undefined, undefined, 'channel_create')
+  if (channel.type == 'text') {
+    db.execute.log.fn(bot, undefined, channel.guild.id, channel, undefined, undefined, undefined, undefined, 'channel_create')
+  }
 })
 
 //Channel Delete
