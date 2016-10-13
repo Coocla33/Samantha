@@ -63,7 +63,7 @@ var log = {
   },
   message_update: {
     fn: function(bot, oldMessage, newMessage, logChannel) {
-      if (msg.author.id == true) {
+      if (oldMessage.author.bot == true) {
         //Nothing
       }
       else {
