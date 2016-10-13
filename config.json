@@ -4,7 +4,8 @@
     "bot_name": "",
     "autosave": ,
     "autostatus": ,
-    "debug": 
+    "debug": ,
+    "requestChannel": ""
   },
   "login": {
     "token": ""
