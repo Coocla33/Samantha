@@ -98,7 +98,7 @@ var functions = {
         }
       }
       else {
-        return 'Oh ooh! Are you sure this is the right command? You can type `' + prefix + 'help` for a full list of commands!'
+        return 'Uh oh! This command does not exist! For a full list of commands, check out `' + prefix + 'help`.'
       }
     }
   },
@@ -250,7 +250,7 @@ var functions = {
       for (var i in achievements) {
         if (achievements[i].type == 'commands_used') {
           if (achievements[i].needed <= users[msg.author.id].stats.commandsUsed && users[msg.author.id].achievement[i] == false) {
-            msg.channel.sendMessage(':tada: You just unlocked a achievement! Type `' + prefix + 'achievements` to see it! :tada:')
+            msg.channel.sendMessage(':tada: You just unlocked a new achievement! Type `' + prefix + 'achievements` to see it! :tada:')
             users[msg.author.id].achievement[i] = true
           }
           else {
