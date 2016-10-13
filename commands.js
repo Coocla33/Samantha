@@ -563,7 +563,9 @@ var cmds = {
     'master': true,
     'admin': false,
     fn: function(bot, msg, suffix) {
-      msg.channel.sendMessage(suffix)
+      if (suffix) {
+        msg.channel.sendMessage(suffix)
+      }
     }
   },
   botinfo: {
