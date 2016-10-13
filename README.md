@@ -14,7 +14,8 @@ Samantha is designed to make the live of a server easier. At the moment Samantha
     "bot_name": "Samantha", 
     "autosave": 300000, 
     "autostatus": 120000, 
-    "debug": false 
+    "debug": false ,
+    "requestChannel": ""
   },
   "login": {
     "token": "" 
