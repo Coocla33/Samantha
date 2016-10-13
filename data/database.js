@@ -27,33 +27,44 @@ var log_time = function() {
 
 var functions = {
   get_commands: {
-    fn: function(msg, type) {
-    	var cmdArray = []
-      var cmdAmount = 0
-    	for (var i in cmd.execute) {
+    fn: function(msg) {
+      var final = []
+    	var defaultArray = []
+      var defaultCount = 0
+      var adminArray = []
+      var adminCount = 0
+      var masterArray = []
+      var masterCount = 0
+      for (var i in cmd.execute) {
         if (cmd.execute[i].master == true) {
-          if (msg.author.id == config.perms.master) {
-            cmdArray.push(cmd.execute[i].name)
-            cmdAmount = cmdAmount + 1
-          }
+          masterArray.push(cmd.execute[i].name)
+          masterCount = masterCount + 1
         }
         else if (cmd.execute[i].admin == true) {
-          if (servers[msg.guild.id].settings.admin.indexOf(msg.author.id) > -1) {
-            cmdArray.push(cmd.execute[i].name)
-            cmdAmount = cmdAmount + 1
-          }
+          adminArray.push(cmd.execute[i].name)
+          adminCount = adminCount + 1
         }
         else {
-          cmdArray.push(cmd.execute[i].name)
-          cmdAmount = cmdAmount + 1
+          defaultArray.push(cmd.execute[i].name)
+          defaultCount = defaultCount + 1
         }
       }
-      if (type == 'amount') {
-        return cmdAmount
+      if (defaultArray) {
+        final.push('**Default - ' + defaultCount + '**')
+        final.push('``' + defaultArray.sort().join('``, ``') + '``')
+        final.push(' ')
       }
-      else if (type == 'list') {
-        return '``' + cmdArray.sort().join('``, ``') + '``'
+      if (adminArray) {
+        final.push('**Admin - ' + adminCount + '**')
+        final.push('``' + adminArray.sort().join('``, ``') + '``')
+        final.push(' ')
       }
+      if (masterArray) {
+        final.push('**Master - ' + masterCount + '**')
+        final.push('``' + masterArray.sort().join('``, ``') + '``')
+        final.push(' ')
+      }
+      return final
     }
   },
   get_help: {
@@ -87,7 +98,7 @@ var functions = {
         }
       }
       else {
-        return 'Oh ooh! Are you sure this is the right command? You can type `' + prefix + 'commands` for a full list of commands!'
+        return 'Oh ooh! Are you sure this is the right command? You can type `' + prefix + 'help` for a full list of commands!'
       }
     }
   },
