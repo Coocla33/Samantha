@@ -629,6 +629,92 @@ var cmds = {
         msg.channel.sendMessage('Oh ooh! Something went wrong! Type `' + prefix + 'help request` to see what you did wrong!')
       }
     }
+  },
+  cc: {
+    'name': 'cc',
+    'desc': 'CooclaCommands! These are commands from one of my first bot! Thanks to Bluetail#0772 for more then half of the command ideas',
+    'usage': '<cc> [command]',
+    'cooldown': 15000,
+    'master': false,
+    'admin': false,
+    fn: function(bot, msg, suffix) {
+      if (suffix) {
+        suffix = suffix.toLowerCase()
+        if (suffix == 'why') {
+          msg.channel.sendMessage('But why? http://imgur.com/TnQRX6v')
+        }
+        else if (suffix == 'pirate') {
+          msg.channel.sendMessage('Pirate life is great! https://www.youtube.com/watch?v=IBH4g_ua5es')
+        }
+        else if (suffix == 'hi') {
+          msg.channel.sendMessage('Well hello there ' + msg.author.username + '. What are you doing in this digital world?')
+        }
+        else if (suffix == 'hype') {
+          msg.channel.sendMessage('*Throws confetti :confetti_ball: sunshine! :sunny: and rainbows :rainbow:!!!*')
+        }
+        else if (suffix == 'kappa') {
+          msg.channel.sendMessage('Kappa: http://giphy.com/gifs/ultimate-kappa-MGLPENCNLcy8o')
+        }
+        else if (suffix == 'hypeno') {
+          msg.channel.sendMessage("*Confetti gets buried after you realize it's a bad idea*")
+        }
+        else if (suffix == 'apple') {
+          msg.channel.sendMessage('An apple a day, keeps the doctor away!')
+        }
+        else if (suffix == 'banana') {
+          msg.channel.sendMessage('banana: https://www.youtube.com/watch?v=sFukyIIM1XI')
+        }
+        else if (suffix == 'hypenoidea') {
+          msg.channel.sendMessage("*you are so hyped but you don't know what's going on* :joy:")
+        }
+        else if (suffix == 'sans') {
+          msg.channel.sendMessage('GEET DUNKED ON!!')
+        }
+        else if (suffix == 'tomato') {
+          msg.channel.sendMessage('potato')
+        }
+        else if (suffix == 'potato') {
+          msg.channel.sendMessage('tomato')
+        }
+        else if (suffix == 'airhorn') {
+          msg.channel.sendMessage('DUUUHHH!!!')
+        }
+        else if (suffix == 'ded') {
+          msg.channel.sendMessage('*Is ded.*')
+        }
+        else if (suffix == 'illuminatie') {
+          msg.channel.sendMessage('Illuminati Confirmed: http://giphy.com/gifs/animation-pizza-illuminati-bi1dfmrAxEGyc')
+        }
+        else if (suffix == 'panic') {
+          msg.channel.sendMessage('*ALL IS LOST!!!*')
+        }
+        else if (suffix == 'derp') {
+          msg.channek.sendMessage(msg.author.username + ' is derping around.')
+        }
+        else if (suffix == 'love') {
+          msg.channel.sendMessage('I love you to ' + msg.author.username + ' <3')
+        }
+        else if (suffix == 'hug') {
+          msg.channel.sendMessage('*Hugs ' + msg.author.username + '*')
+        }
+        else if (suffix == 'confused') {
+          msg.channel.sendMessage('*' + msg.author.username + ' is confused.*')
+        }
+        else if (suffix == 'cry') {
+          msg.channel.sendMessage('*' + msg.author.username + ' is crying in a corner...*')
+        }
+        else {
+          msg.channel.sendMessage('Oh ooh! That command aint here... Type `' + prefix + 'cc` to see all the commands!')
+        }
+      }
+      else {
+        var messageArray = []
+        var commandArray = ["why", "pirate", "hi", "hype", "kappa", "hypeno", "apple", "banana", "hypeno", "sans", "tomato", "potato", "airhorn", "ded", "illuminatie", "panic", "derp", "love", "hug", "confused", "cry"]
+        messageArray.push('**Commands - ' + commandArray.length + '**')
+        messageArray.push('``' + commandArray.sort().join('``, ``') + '``')
+        msg.channel.sendMessage(messageArray)
+      }
+    }
   }
 }
 
