@@ -6,7 +6,7 @@
     "desc": "You used 5 commands!"
   },
   "1": {
-    "emoji": ":waning_gibbous_moon:",
+    "emoji": ":warning_gibbous_moon:",
     "type": "commands_used",
     "needed": 10,
     "desc": "You used 10 commands!"
