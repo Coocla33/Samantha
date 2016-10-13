@@ -18,21 +18,6 @@ var cmds = {
       msg.channel.sendMessage('template')
     }
   },
-  commands: {
-    'name': 'commands',
-    'desc': 'A list of all the commands!',
-    'usage': '<commands>',
-    'cooldown': 5000,
-    'master': false,
-    'admin': false,
-    fn: function(bot, msg, suffix) {
-      var messageArray = []
-      var commandAmount = db.execute.get_commands.fn(msg, 'amount')
-      messageArray.push('`[' + commandAmount + ']`')
-      messageArray.push(db.execute.get_commands.fn(msg, 'list'))
-      msg.channel.sendMessage(messageArray)
-    }
-  },
   help: {
     'name': 'help',
     'desc': 'Helping users like you since 1989!',
@@ -42,10 +27,10 @@ var cmds = {
     'admin': false,
     fn: function(bot, msg, suffix) {
       if (suffix) {
-        msg.channel.sendMessage(db.execute.get_help.fn(msg, suffix))
+        msg.channel.sendMessage(db.execute.get_help.fn(msg, suffix.toLowerCase()))
       }
       else {
-        msg.channel.sendMessage('Oh ooh! You forgot to mention a command name! Use the command like this: `<help> [command_name]`!')
+        msg.channel.sendMessage(db.execute.get_commands.fn(msg))
       }
     }
   },
@@ -229,7 +214,7 @@ var cmds = {
     'desc': 'Ping pong!',
     'usage': '<ping>',
     'cooldown': 5000,
-    'master': true,
+    'master': false,
     'admin': false,
     fn: function(bot, msg, suffix) {
       var msg_time = Date.now()
@@ -338,7 +323,7 @@ var cmds = {
           messageArray.push('``' + membersWithRole.map(m => m.user.username).join('``, ``') + '``')
           msg.channel.sendMessage(messageArray)
         } else {
-          msg.channel.sendMessage('Oh ooh! That role does not exist!')
+          msg.channel.sendMessage('Oh ooh! That role does not exist! Type `' + prefix + 'serverinfo` to see a list of server roles and a lot more!')
         }
       } else {
         msg.channel.sendMessage('Oh ooh! Something went wrong! Type `' + prefix + 'help inrole` to see what you did wrong!')
@@ -462,7 +447,7 @@ var cmds = {
           }
         } else if (suffix.toLowerCase().split(' ')[0] == 'disable') { //Disable
           if (servers[msg.guild.id].settings.logger.enable == true) {
-            msg.channel.sendMessage('Logger enabled!')
+            msg.channel.sendMessage('Logger disabled!')
             servers[msg.guild.id].settings.logger.enable = false
             db.execute.servers_save.fn(servers)
           } else {
@@ -508,6 +493,7 @@ var cmds = {
     'admin': false,
     fn: function(bot, msg, suffix) {
       var random = Math.floor((Math.random() * 10) + 1)
+      var randomComma = Math.floor((Math.random() * 9) + 1)
       if (suffix.toLowerCase() == 'samantha') {
         msg.channel.sendMessage('I rate `myself` 11/10! :heart:  :sparkles:')
       }
@@ -518,8 +504,11 @@ var cmds = {
         if (random == 5) {
           msg.channel.sendMessage('I rate `' + suffix + '` 5/7!')
         }
-        else {
+        else if (random == 10) {
           msg.channel.sendMessage('I rate `' + suffix + '` ' + random + '/10!')
+        }
+        else {
+          msg.channel.sendMessage('I rate `' + suffix + '` ' + random + '.' + randomComma + '/10!')
         }
       }
     }
@@ -528,7 +517,7 @@ var cmds = {
     'name': 'topServers',
     'desc': 'Showing the 10 biggest servers that i am in!',
     'usage': '<topservers> [amount_number]',
-    'cooldown': 5000,
+    'cooldown': 30000,
     'master': false,
     'admin': false,
     fn: function(bot, msg, suffix) {
@@ -549,7 +538,7 @@ var cmds = {
                 final.push('`[' + (i + 1) + ']` **' + bot.guilds.get(mappedGuilds[i].id).name + '** - *' + bot.guilds.get(mappedGuilds[i].id).memberCount + ' Members*')
               }
               else {
-                final.push('`[' + (i + 1) + ']` Not enough servers...')
+                //Nothing
               }
             }
           }
@@ -594,11 +583,49 @@ var cmds = {
       messageArray.push('Guilds   : ' + bot.guilds.size)
       messageArray.push('Users    : ' + bot.users.size)
       messageArray.push('Uptime   : ' + uptime.hour + ':' + uptime.min + ':' + uptime.sec + ' (Hour : Min : Sec)')
-      messageArray.push()
-      messageArray.push()
-      messageArray.push()
       messageArray.push('```')
       msg.channel.sendMessage(messageArray)
+    }
+  },
+  dice: {
+    'name': 'dice',
+    'desc': 'Wanna play some dice games?',
+    'usage': '<dice> [number]',
+    'cooldown': 5000,
+    'master': false,
+    'admin': false,
+    fn: function(bot, msg, suffix) {
+      var random
+      if (suffix) {
+        if (isNaN(suffix)) {
+          msg.channel.sendMessage('Oh ooh! Something went wrong! Type `' + prefix + 'help dice` to see what you did wrong!')
+        }
+        else {
+          random = Math.floor((Math.random() * suffix) + 1)
+          msg.channel.sendMessage('You threw a `' + random + '`')
+        }
+      }
+      else {
+        random = Math.floor((Math.random() * 6) + 1)
+        msg.channel.sendMessage('You threw a `' + random + '`')
+      }
+    }
+  },
+  request: {
+    'name': 'request',
+    'desc': 'Do you think you have a good idea? Request it here!',
+    'usage': '<request> [idea]',
+    'cooldown': 5000,
+    'master': false,
+    'admin': false,
+    fn: function(bot, msg, suffix) {
+      if (suffix) {
+        msg.channel.sendMessage('Request send to the `Samantha Server`!')
+        bot.channels.get(config.misc.requestChannel).sendMessage('Request by `' + msg.author.username + '#' + msg.author.discriminator + '` on the server `' + msg.guild.name + '`: `' + suffix + '`')
+      }
+      else {
+        msg.channel.sendMessage('Oh ooh! Something went wrong! Type `' + prefix + 'help request` to see what you did wrong!')
+      }
     }
   }
 }

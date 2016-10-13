@@ -52,14 +52,24 @@ var log = {
   },
   message_delete: {
     fn: function(bot, msg, logChannel) {
-      var time = db.execute.get_time.fn(new Date())
-      bot.channels.get(logChannel).sendMessage('`' + time + '` - `Message Delete` - Message: `' + msg.content + '` Author: `' + msg.author.username + '`')
+      if (msg.author.bot == true) {
+        //Nothing
+      }
+      else {
+        var time = db.execute.get_time.fn(new Date())
+        bot.channels.get(logChannel).sendMessage('`' + time + '` - `Message Delete` - Message: `' + msg.content + '` Author: `' + msg.author.username + '`')
+      }
     }
   },
   message_update: {
     fn: function(bot, oldMessage, newMessage, logChannel) {
-      var time = db.execute.get_time.fn(new Date())
-      bot.channels.get(logChannel).sendMessage('`' + time + '` - `Message Update` - Old Message: `' + oldMessage.content + '` New Message: `' + newMessage.content + '`')
+      if (msg.author.id == true) {
+        //Nothing
+      }
+      else {
+        var time = db.execute.get_time.fn(new Date())
+        bot.channels.get(logChannel).sendMessage('`' + time + '` - `Message Update` - Old Message: `' + oldMessage.content + '` New Message: `' + newMessage.content + '`')
+      }
     }
   }
 }
