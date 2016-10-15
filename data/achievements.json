@@ -34,5 +34,17 @@
     "type": "commands_used",
     "needed": 1000,
     "desc": "You used 1000 commands!!1!1!!!!"
+  },
+  "6": {
+    "emoji": ":newspaper:",
+    "type": "rpcWins",
+    "needed": 1,
+    "desc": "Beginners luck"
+  },
+  "7": {
+    "emoji": ":scissors:",
+    "type": "rpcWins",
+    "needed": 10,
+    "desc": "10 wins, not bad"
   }
 }
