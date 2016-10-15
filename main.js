@@ -176,7 +176,7 @@ bot.on('guildBanRemove', (guild, user) => {
 
 //Channel Create
 bot.on('channelCreate', (channel) => {
-  if (channel.type == 'text' || channel.tpye == 'voice') {
+  if (channel.type == 'text' || channel.type == 'voice') {
     db.execute.log.fn(bot, undefined, channel.guild.id, channel, undefined, undefined, undefined, undefined, 'channel_create')
   }
 })
