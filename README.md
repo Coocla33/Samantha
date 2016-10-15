@@ -29,6 +29,3 @@ Samantha is designed to make the life in a server easier. At the moment Samantha
 }
 ```
 
-
-**Disclaimer** *The bot is open source but you are not allowed to copy it and use any part of it!*
-
