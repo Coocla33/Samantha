@@ -7,7 +7,7 @@ const blacklist = require('./data//blacklist.json')
 var prefix = config.misc.prefix
 
 var cmds = {
-  template: {
+  'template': {
     'name': 'template',
     'desc': 'template',
     'usage': '<template>',
@@ -18,7 +18,7 @@ var cmds = {
       msg.channel.sendMessage('template')
     }
   },
-  help: {
+  'help': {
     'name': 'help',
     'desc': 'Helping users like you since 1989!',
     'usage': '<help> [command_name]',
@@ -34,7 +34,7 @@ var cmds = {
       }
     }
   },
-  customize: {
+  'customize': {
     'name': 'customize',
     'desc': 'Customize the bot for your server! For more brief overview, check the usage field!',
     'usage': '<customize> [set, enable, disable] [joinMessage, leaveMessage] [Custom_joinMessage, Custom_leaveMessage]',
@@ -118,7 +118,7 @@ var cmds = {
       db.execute.servers_save.fn(servers) //Saving to Servers.json
     }
   },
-  update: {
+  'update': {
     'name': 'update_servers',
     'desc': 'Update all the servers to the servers.json',
     'usage': '<update_servers>',
@@ -131,7 +131,7 @@ var cmds = {
       db.execute.update_users.fn(bot)
     }
   },
-  addadmin: {
+  'addadmin': {
     'name': 'addAdmin',
     'desc': 'This adds people to the Bot Admin list!',
     'usage': '<addadmin> [user_mention]',
@@ -152,7 +152,7 @@ var cmds = {
       db.execute.servers_save.fn(servers) //Saving to Servers.json
     }
   },
-  removeadmin: {
+  'removeadmin': {
     'name': 'removeAdmin',
     'desc': 'This removes people from the Bot Admin list!',
     'usage': '<removeadmin> [user_mention]',
@@ -181,7 +181,7 @@ var cmds = {
       }
     }
   },
-  adminlist: {
+  'adminlist': {
     'name': 'adminList',
     'desc': 'This shows all the people from the Bot Admin list!',
     'usage': '<adminlist>',
@@ -198,7 +198,7 @@ var cmds = {
       })
     }
   },
-  achievements: {
+  'achievements': {
     'name': 'achievements',
     'desc': 'Shows all the achievements you\'ve got!',
     'usage': '<achievement>',
@@ -209,7 +209,7 @@ var cmds = {
       msg.channel.sendMessage(db.execute.getAchievement.fn(users, msg.author))
     }
   },
-  ping: {
+  'ping': {
     'name': 'ping',
     'desc': 'Ping pong!',
     'usage': '<ping>',
@@ -223,7 +223,7 @@ var cmds = {
       }).catch(console.error)
     }
   },
-  eval: {
+  'eval': {
     'name': 'eval',
     'desc': 'Doing some hardcore stuff',
     'usage': '<eval> [code]',
@@ -247,7 +247,7 @@ var cmds = {
       })
     }
   },
-  blacklist: {
+  'blacklist': {
     'name': 'blacklist',
     'desc': 'Just adding some people to the naughty list...',
     'usage': '<blacklist> [player_mention]',
@@ -268,7 +268,7 @@ var cmds = {
       }
     }
   },
-  blacklistremove: {
+  'blacklistremove': {
     'name': 'blacklistRemove',
     'desc': 'Just removing some people from the naughty list...',
     'usage': '<blacklistremove> [player_mention]',
@@ -289,7 +289,7 @@ var cmds = {
       }
     }
   },
-  naughtylist: {
+  'naughtylist': {
     'name': 'naughtyList',
     'desc': 'Just showing the naughty list...',
     'usage': '<naughtylist>',
@@ -305,7 +305,7 @@ var cmds = {
       msg.channel.sendMessage('``' + blacklistArray.sort().join('``\n``') + '``')
     }
   },
-  inrole: {
+  'inrole': {
     'name': 'inrole',
     'desc': 'Shows everybody that has a certain role',
     'usage': '<inrole> [role_name]',
@@ -330,7 +330,7 @@ var cmds = {
       }
     }
   },
-  kill: {
+  'kill': {
     'name': 'kill',
     'desc': 'Killing people!',
     'usage': '<kill> [user_mentions, custom_text]',
@@ -355,7 +355,7 @@ var cmds = {
       }
     }
   },
-  serverinfo: {
+  'serverinfo': {
     'name': 'serverInfo',
     'desc': 'Shows everything about the server!',
     'usage': '<serverinfo>',
@@ -387,7 +387,7 @@ var cmds = {
       msg.channel.sendMessage(messageArray)
     }
   },
-  userinfo: {
+  'userinfo': {
     'name': 'userInfo',
     'desc': 'Shows stuff about yourself and stalking others!',
     'usage': '<userinfo> [user_mention]',
@@ -428,7 +428,7 @@ var cmds = {
       msg.channel.sendMessage(messageArray)
     }
   },
-  logger: {
+  'logger': {
     'name': 'logger',
     'desc': 'Logging everything!',
     'usage': '<logger> [enable, disable, set]',
@@ -465,7 +465,7 @@ var cmds = {
       }
     }
   },
-  info: {
+  'info': {
     'name': 'info',
     'desc': 'Just some standard info about Samantha!',
     'usage': '<info>',
@@ -484,7 +484,7 @@ var cmds = {
       msg.channel.sendMessage(messageArray)
     }
   },
-  rate: {
+  'rate': {
     'name': 'rate',
     'desc': 'I literaly rate everything!',
     'usage': '<rate> [custom_text]',
@@ -498,7 +498,7 @@ var cmds = {
         msg.channel.sendMessage('I rate `myself` 11/10! :heart:  :sparkles:')
       } else if (suffix.toLowerCase() == 'coocla33' || suffix.toLowerCase() == 'misha') {
         msg.channel.sendMessage('I rate `' + suffix + '` over 9000!')
-      } else {
+      } else if (suffix){
         if (random == 5) {
           msg.channel.sendMessage('I rate `' + suffix + '` 5/7!')
         } else if (random == 10) {
@@ -507,9 +507,12 @@ var cmds = {
           msg.channel.sendMessage('I rate `' + suffix + '` ' + random + '.' + randomComma + '/10!')
         }
       }
+      else {
+        msg.channel.sendMessage('Uh oh! Something went wrong! Type `' + prefix + 'help rate` to see what you did wrong!')
+      }
     }
   },
-  topservers: {
+  'topservers': {
     'name': 'topServers',
     'desc': 'Shows the 10 biggest servers that i am in!',
     'usage': '<topservers> [amount_number]',
@@ -551,7 +554,7 @@ var cmds = {
       msg.channel.sendMessage(final)
     }
   },
-  say: {
+  'say': {
     'name': 'say',
     'desc': 'Saying stuff',
     'usage': '<say> [suffix]',
@@ -564,7 +567,7 @@ var cmds = {
       }
     }
   },
-  botinfo: {
+  'botinfo': {
     'name': 'botInfo',
     'desc': 'Shows all the bot information!',
     'usage': '<botinfo>',
@@ -585,7 +588,7 @@ var cmds = {
       msg.channel.sendMessage(messageArray)
     }
   },
-  dice: {
+  'dice': {
     'name': 'dice',
     'desc': 'Wanna play some dice games?',
     'usage': '<dice> [number]',
@@ -609,7 +612,7 @@ var cmds = {
       }
     }
   },
-  request: {
+  'request': {
     'name': 'request',
     'desc': 'Do you think you have a good idea? Request it here!',
     'usage': '<request> [idea]',
@@ -624,6 +627,182 @@ var cmds = {
       else {
         msg.channel.sendMessage('Uh oh! Something went wrong! Type `' + prefix + 'help request` to see what you did wrong!')
       }
+    }
+  },
+  'cc': {
+    'name': 'cc',
+    'desc': 'CooclaCommands! These are commands from one of my first bot! Thanks to Bluetail#0772 for more then half of the command ideas',
+    'usage': '<cc> [command]',
+    'cooldown': 15000,
+    'master': false,
+    'admin': false,
+    fn: function(bot, msg, suffix) {
+      if (suffix) {
+        suffix = suffix.toLowerCase()
+        if (suffix == 'why') {
+          msg.channel.sendMessage('But why? http://imgur.com/TnQRX6v')
+        }
+        else if (suffix == 'pirate') {
+          msg.channel.sendMessage('Pirate life is great! https://www.youtube.com/watch?v=IBH4g_ua5es')
+        }
+        else if (suffix == 'hi') {
+          msg.channel.sendMessage('Well hello there ' + msg.author.username + '. What are you doing in this digital world?')
+        }
+        else if (suffix == 'hype') {
+          msg.channel.sendMessage('*Throws confetti :confetti_ball: sunshine! :sunny: and rainbows :rainbow:!!!*')
+        }
+        else if (suffix == 'kappa') {
+          msg.channel.sendMessage('Kappa: http://giphy.com/gifs/ultimate-kappa-MGLPENCNLcy8o')
+        }
+        else if (suffix == 'hypeno') {
+          msg.channel.sendMessage("*Confetti gets buried after you realize it's a bad idea*")
+        }
+        else if (suffix == 'apple') {
+          msg.channel.sendMessage('An apple a day, keeps the doctor away!')
+        }
+        else if (suffix == 'banana') {
+          msg.channel.sendMessage('banana: https://www.youtube.com/watch?v=sFukyIIM1XI')
+        }
+        else if (suffix == 'hypenoidea') {
+          msg.channel.sendMessage("*you are so hyped but you don't know what's going on* :joy:")
+        }
+        else if (suffix == 'sans') {
+          msg.channel.sendMessage('GEET DUNKED ON!!')
+        }
+        else if (suffix == 'tomato') {
+          msg.channel.sendMessage('potato')
+        }
+        else if (suffix == 'potato') {
+          msg.channel.sendMessage('tomato')
+        }
+        else if (suffix == 'airhorn') {
+          msg.channel.sendMessage('DUUUHHH!!!')
+        }
+        else if (suffix == 'ded') {
+          msg.channel.sendMessage('*Is ded.*')
+        }
+        else if (suffix == 'illuminatie') {
+          msg.channel.sendMessage('Illuminati Confirmed: http://giphy.com/gifs/animation-pizza-illuminati-bi1dfmrAxEGyc')
+        }
+        else if (suffix == 'panic') {
+          msg.channel.sendMessage('*ALL IS LOST!!!*')
+        }
+        else if (suffix == 'derp') {
+          msg.channek.sendMessage(msg.author.username + ' is derping around.')
+        }
+        else if (suffix == 'love') {
+          msg.channel.sendMessage('I love you to ' + msg.author.username + ' <3')
+        }
+        else if (suffix == 'hug') {
+          msg.channel.sendMessage('*Hugs ' + msg.author.username + '*')
+        }
+        else if (suffix == 'confused') {
+          msg.channel.sendMessage('*' + msg.author.username + ' is confused.*')
+        }
+        else if (suffix == 'cry') {
+          msg.channel.sendMessage('*' + msg.author.username + ' is crying in a corner...*')
+        }
+        else {
+          msg.channel.sendMessage('Oh ooh! That command aint here... Type `' + prefix + 'cc` to see all the commands!')
+        }
+      }
+      else {
+        var messageArray = []
+        var commandArray = ["why", "pirate", "hi", "hype", "kappa", "hypeno", "apple", "banana", "hypenoidea", "sans", "tomato", "potato", "airhorn", "ded", "illuminatie", "panic", "derp", "love", "hug", "confused", "cry"]
+        messageArray.push('**CooclaCommands - ' + commandArray.length + '**')
+        messageArray.push('``' + commandArray.sort().join('``, ``') + '``')
+        msg.channel.sendMessage(messageArray)
+      }
+    }
+  },
+  'rpc': {
+    'name': 'rpc',
+    'desc': 'Rock Paper Scissors!',
+    'usage': '<rcps> [rock, paper, scissor]',
+    'cooldown': 5000,
+    'master': false,
+    'admin': false,
+    fn: function(bot, msg, suffix) {
+      if (suffix) {
+        var random = Math.floor((Math.random() * 3) + 1)
+        var choice = 'nothing'
+        if (random == 1) {choice = 'rock'}
+        if (random == 2) {choice = 'paper'}
+        if (random == 3) {choice = 'scissor'}
+        if (suffix.toLowerCase() == 'rock') {
+          if (choice == 'paper') { //Lose
+            msg.channel.sendMessage('You lose! Samantha used **Paper**!')
+          }
+          else if (choice == 'scissor') { //Win
+            msg.channel.sendMessage('You win! Samantha used **Scissor**!')
+            users[msg.author.id].stats.rpcWins += 1
+          }
+          else { //Tie
+            msg.channel.sendMessage('It is a tie!')
+          }
+        }
+        else if (suffix.toLowerCase() == 'paper') {
+          if (choice == 'scissor') { //Lose
+            msg.channel.sendMessage('You lose! Samantha used **Scissor**!')
+          }
+          else if (choice == 'rock') { //Win
+            msg.channel.sendMessage('You win! Samantha used **Rock**!')
+            users[msg.author.id].stats.rpcWins += 1
+          }
+          else { //Tie
+            msg.channel.sendMessage('It is a tie!')
+          }
+        }
+        else if (suffix.toLowerCase() == 'scissor') {
+          if (choice == 'rock') { //Lose
+            msg.channel.sendMessage('You lose! Samantha used **Rock**!')
+          }
+          else if (choice == 'paper') { //Win
+            msg.channel.sendMessage('You win! Samantha used **Paper**!')
+            users[msg.author.id].stats.rpcWins += 1
+          }
+          else { //Tie
+            msg.channel.sendMessage('It is a tie!')
+          }
+        }
+        else {
+          msg.channel.sendMessage('Uh oh! Something went wrong! Type `' + prefix + 'help rpc` to see what you did wrong!')
+        }
+      }
+      else {
+        msg.channel.sendMessage('Uh oh! Something went wrong! Type `' + prefix + 'help rpc` to see what you did wrong!')
+      }
+    }
+  },
+  '8ball': {
+    'name': '8ball',
+    'desc': 'I. Know. Everything.',
+    'usage': '<8ball> [suffix]',
+    'cooldown': 5000,
+    'master': false,
+    'admin': false,
+    fn: function(bot, msg, suffix) {
+      if (suffix) {
+        var answer = ['It is certain', 'It is decidedly so', 'Without a doubt', 'Yes – definitely', 'You may rely on it', 'As I see it, yes', 'Most likely', 'Outlook good', 'Yes', 'Signs point to yes', 'Reply hazy, try again', 'Ask again later', 'Better not tell you now', 'Cannot predict now', 'Concentrate and ask again', "Don't count on it", 'My reply is no', 'My sources say no', 'Outlook not so good', 'Very doubtful']
+        var random = Math.floor((Math.random() * answer.length) + 1)
+        msg.channel.sendMessage(answer[random])
+      }
+      else {
+        msg.channel.sendMessage('Uh oh! Something went wrong! Type `' + prefix + 'help 8ball` to see what you did wrong!')
+      }
+    }
+  },
+  'save': {
+    'name': 'save',
+    'desc': 'I may save your life...',
+    'usage': '<save>',
+    'cooldown': 5000,
+    'master': true,
+    'admin': false,
+    fn: function(bot, msg, suffix) {
+      db.execute.users_save.fn(users)
+      db.execute.servers_save.fn(servers)
+      msg.channel.sendMessage('Saved!')
     }
   }
 }
