@@ -37,29 +37,33 @@ var functions = {
       var masterCount = 0
       for (var i in cmd.execute) {
         if (cmd.execute[i].master == true) {
-          masterArray.push(cmd.execute[i].name)
-          masterCount = masterCount + 1
+          if (config.perms.master.indexOf(msg.author.id) > -1) {
+            masterArray.push(cmd.execute[i].name)
+            masterCount = masterCount + 1
+          }
         }
         else if (cmd.execute[i].admin == true) {
-          adminArray.push(cmd.execute[i].name)
-          adminCount = adminCount + 1
+          if (servers[msg.guild.id].settings.admin.indexOf(msg.author.id) > -1) {
+            adminArray.push(cmd.execute[i].name)
+            adminCount = adminCount + 1
+          }
         }
         else {
           defaultArray.push(cmd.execute[i].name)
           defaultCount = defaultCount + 1
         }
       }
-      if (defaultArray) {
+      if (defaultArray.length >= 1) {
         final.push('**Default - ' + defaultCount + '**')
         final.push('``' + defaultArray.sort().join('``, ``') + '``')
         final.push(' ')
       }
-      if (adminArray) {
+      if (adminArray.length >= 1) {
         final.push('**Admin - ' + adminCount + '**')
         final.push('``' + adminArray.sort().join('``, ``') + '``')
         final.push(' ')
       }
-      if (masterArray) {
+      if (masterArray.length >= 1) {
         final.push('**Master - ' + masterCount + '**')
         final.push('``' + masterArray.sort().join('``, ``') + '``')
         final.push(' ')
@@ -117,7 +121,7 @@ var functions = {
   },
   user_create_object: {
     fn:function(user) {
-      var object = {"name": user.username, "stats": {"commandsUsed": 1}, "achievement": [false, false, false, false, false, false]}
+      var object = {"name": user.username, "stats": {"commandsUsed": 1, "rpcWins": 0}, "achievement": [false, false, false, false, false, false, false, false]}
       users[user.id] = object
       functions.users_save.fn(users)
     }
@@ -255,6 +259,12 @@ var functions = {
           }
           else {
             //Nothing
+          }
+        }
+        else if (achievements[i].type == 'rpcWins') {
+          if (achievements[i].needed <= users[msg.author.id].stats.rpcWins && users[msg.author.id].achievement[i] == false) {
+            msg.channel.sendMessage(':tada: You just unlocked a achievement! Type `' + prefix + 'achievements` to see it! :tada:')
+            users[msg.author.id].achievement[i] = true
           }
         }
       }
