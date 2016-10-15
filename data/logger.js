@@ -57,7 +57,7 @@ var log = {
       }
       else {
         var time = db.execute.get_time.fn(new Date())
-        bot.channels.get(logChannel).sendMessage('`' + time + '` - `Message Delete` - Message: `' + msg.content + '` Author: `' + msg.author.username + '`')
+        bot.channels.get(logChannel).sendMessage('`' + time + '` - `Message Delete` - Message: \n`' + msg.content + '`\n Author: `' + msg.author.username + '`')
       }
     }
   },
@@ -68,7 +68,7 @@ var log = {
       }
       else {
         var time = db.execute.get_time.fn(new Date())
-        bot.channels.get(logChannel).sendMessage('`' + time + '` - `Message Update` - Old Message: `' + oldMessage.content + '` New Message: `' + newMessage.content + '`')
+        bot.channels.get(logChannel).sendMessage('`' + time + '` - `Message Update` - Old Message: \n```' + oldMessage.content + '``` \nNew Message: \n```' + newMessage.content + '```')
       }
     }
   }
