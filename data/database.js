@@ -250,11 +250,17 @@ var functions = {
       for (var i in achievements) {
         if (achievements[i].type == 'commands_used') {
           if (achievements[i].needed <= users[msg.author.id].stats.commandsUsed && users[msg.author.id].achievement[i] == false) {
-            msg.channel.sendMessage(':tada: You just unlocked a new achievement! Type `' + prefix + 'achievements` to see it! :tada:')
+            msg.channel.sendMessage(':tada: You just unlocked a achievement! Type `' + prefix + 'achievements` to see it! :tada:')
             users[msg.author.id].achievement[i] = true
           }
           else {
             //Nothing
+          }
+        }
+        else if (achievements[i].type == 'rpcWins') {
+          if (achievements[i].needed <= users[msg.author.id].stats.rpcWins && users[msg.author.id].achievement[i] == false) {
+            msg.channel.sendMessage(':tada: You just unlocked a achievement! Type `' + prefix + 'achievements` to see it! :tada:')
+            users[msg.author.id].achievement[i] = true
           }
         }
       }
@@ -266,6 +272,9 @@ var functions = {
       var uptimeHour = Math.floor(uptimeSecNum / 3600)
       var uptimeMin = Math.floor((uptimeSecNum - (uptimeHour * 3600)) / 60)
       var uptimeSec = (uptimeSecNum - (uptimeHour * 3600) - (uptimeMin * 60))
+      if (uptimeSec < 10) {uptimeSec = '0' + uptimeSec}
+      if (uptimeMin < 10) {uptimeMin = '0' + uptimeMin}
+      if (uptimeHour < 10) {uptimeHour = '0' + uptimeHour}
       return {"sec": uptimeSec, "hour": uptimeHour, "min": uptimeMin}
     }
   },
