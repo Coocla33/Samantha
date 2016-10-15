@@ -32,11 +32,11 @@ console.log(log_time() + log_bot + 'Starting up ' + config.misc.bot_name + '!')
 var startup = new Date()
 bot.on('ready', () => {
   var startup_done = new Date() - startup
-  console.log(log_time() + log_bot + config.misc.bot_name + ' started up! (Time taken ' + startup_done + 'ms)')
+  console.log(log_time() + log_bot + config.misc.bot_name + ' started up! (' + startup_done + 'ms)')
   console.log(log_time() + log_bot + 'Servers  | ' + bot.guilds.size)
   console.log(log_time() + log_bot + 'Users    | ' + bot.users.size)
   console.log(log_time() + log_bot + 'Channels | ' + bot.channels.size)
-  console.log(log_time() + log_bot + 'Started auto-saving!')
+  console.log(log_time() + log_bot + 'Started auto saving!')
   db.execute.save_auto.fn(servers, users, blacklist)
   db.execute.status_set_auto.fn(bot)
   db.execute.update_servers.fn(bot)
@@ -63,7 +63,8 @@ bot.on('message', msg => {
                     db.execute.command_log.fn(name, msg)
                     users[msg.author.id].stats.commandsUsed += 1
                     cooldown(msg, name)
-                  } else if (cmd.execute[name].master == true) { //Master Commands
+                  }
+                  else if (cmd.execute[name].master == true) { //Master Commands
                     if (config.perms.master.indexOf(msg.author.id) > -1) {
                       cmd.execute[name].fn(bot, msg, suffix)
                       db.execute.command_log.fn(name, msg)
@@ -71,7 +72,7 @@ bot.on('message', msg => {
                       cooldown(msg, name)
                     }
                     else {
-                      msg.channel.sendMessage('Uh oh! Something went wrong! Are you sure you are allowed to use this command? Please check `' + prefix + 'commands` to see the commands you\'re allowed to use!')
+                      msg.channel.sendMessage('Oh ooh! Something went wrong! Are you sure you are allowed to use this command? You can type `' + prefix + 'commands` to see a full list of all the commands you may use!')
                     }
                   }
                   else if (cmd.execute[name].admin == true) { //Admin Commands
@@ -80,10 +81,12 @@ bot.on('message', msg => {
                       db.execute.command_log.fn(name, msg)
                       users[msg.author.id].stats.commandsUsed += 1
                       cooldown(msg, name)
-                    } else {
-                      msg.channel.sendMessage('Uh oh! Something went wrong! Are you sure you are allowed to use this command? Please check `' + prefix + 'commands` to see the commands you\'re allowed to use!')
                     }
-                  } else { //Default Commands
+                    else {
+                      msg.channel.sendMessage('Oh ooh! Something went wrong! Are you sure you are allowed to use this command? You can type `' + prefix + 'commands` to see a full list of all the commands you may use!')
+                    }
+                  }
+                  else { //Default Commands
                     if (user_cooldown[msg.author.id]) {
                       if (user_cooldown[msg.author.id][name]) {
                         if (user_cooldown[msg.author.id][name].cooldown < new Date()) {
@@ -93,7 +96,7 @@ bot.on('message', msg => {
                           cooldown(msg, name)
                         } else {
                           var wait = user_cooldown[msg.author.id][name].cooldown - new Date()
-                          msg.channel.sendMessage('Woah there, Nelly.. Cool down for another `' + Math.floor(wait / 1000) + 's` to use this command again!')
+                          msg.channel.sendMessage('Oh ooh! You went to fast! Wait another `' + wait + 'ms` to use this command again!')
                         }
                       } else {
                         cooldown(msg, name)
@@ -109,7 +112,7 @@ bot.on('message', msg => {
                     }
                   }
                 } else {
-                  msg.channel.sendMessage('Generating user profile, please retry!')
+                  msg.channel.sendMessage('Generating user profile... Please try again!')
                   db.execute.user_create_object.fn(msg.author)
                 }
               }
@@ -117,7 +120,7 @@ bot.on('message', msg => {
               //Nothing
             }
           } catch (err) {
-            msg.channel.sendMessage('Uh oh! Something went incredibly wrong, please file this report to the bot owner: `' + err + '`!')
+            msg.channel.sendMessage('Oh ooh! Something went wrong! My master screwed something up... Please show this to him: `' + err + '`!')
             if (config.misc.debug == true) {
               console.log(log_time() + log_err + 'Command: ' + name + ' Error: ' + err.stack)
             } else {
@@ -128,7 +131,7 @@ bot.on('message', msg => {
       }
     }
     else {
-      msg.channel.sendMessage('I\'m **very** sorry, but I refuse to work in Direct Messages!')
+      msg.channel.sendMessage('I am sorry, but i do not work in private channels!')
     }
   }
 })
@@ -137,14 +140,14 @@ bot.on('message', msg => {
 bot.on('guildCreate', (guild) => {
   db.execute.update_servers.fn(bot)
   db.execute.update_users.fn(bot)
-  console.log(log_time() + log_bot + 'Joined a server <' + guild.name + '>!')
+  console.log(log_time() + log_bot + 'Joined the server <' + guild.name + '>!')
 })
 
 //Server leave
 bot.on('guildDelete', (guild) => {
   db.execute.server_remove_object.fn(guild)
   db.execute.update_users.fn(bot)
-  console.log(log_time() + log_bot + 'Left a server <' + guild.name + '>!')
+  console.log(log_time() + log_bot + 'Left the server <' + guild.name + '>!')
 })
 
 //User join
@@ -173,7 +176,7 @@ bot.on('guildBanRemove', (guild, user) => {
 
 //Channel Create
 bot.on('channelCreate', (channel) => {
-  if (channel.type == 'text') {
+  if (channel.type == 'text' || channel.tpye == 'voice') {
     db.execute.log.fn(bot, undefined, channel.guild.id, channel, undefined, undefined, undefined, undefined, 'channel_create')
   }
 })
