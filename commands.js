@@ -633,7 +633,7 @@ var cmds = {
     'name': 'cc',
     'desc': 'CooclaCommands! These are commands from one of my first bot! Thanks to Bluetail#0772 for more then half of the command ideas',
     'usage': '<cc> [command]',
-    'cooldown': 15000,
+    'cooldown': 5000,
     'master': false,
     'admin': false,
     fn: function(bot, msg, suffix) {
