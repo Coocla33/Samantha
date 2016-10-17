@@ -3,6 +3,7 @@ const servers = require('./data/servers.json')
 const users = require('./data/users.json')
 const config = require('./config.json')
 const blacklist = require('./data//blacklist.json')
+const request = require('request')
 
 var prefix = config.misc.prefix
 
@@ -824,6 +825,60 @@ var cmds = {
       messageArray.push('Bans Created/Removed     : ' + servers[msg.guild.id].stats.banadds + '/' + servers[msg.guild.id].stats.banremoves)
       messageArray.push('```')
       msg.channel.sendMessage(messageArray)
+    }
+  },
+  'pokemon': {
+    'name': 'pokemon',
+    'desc': 'Pokédex in a nutshell!',
+    'usage': '<pokemon> [pokemon_id, pokemon_name]',
+    'cooldown': 10000,
+    'master': false,
+    'admin': false,
+    fn: function(bot, msg, suffix) {
+      if (suffix) {
+        var messageArray = []
+        var games = []
+        messageArray.push('```')
+        request('https://pokeapi.co/api/v1/pokemon/' + suffix + '/', function(err, res, body) {
+          if (err) {
+            console.log(chalk_time() + chalk_error + err)
+            msg.channel.sendMessage('Uh oh! Something went wrong! I think the pokemon API did it...')
+          }
+          else {
+            if (body) {
+              var parsed = JSON.parse(body)
+              messageArray.push(' - - - - - [INFO] - - - - - ')
+              messageArray.push('Name        : ' + parsed.name)
+              messageArray.push('Id          : ' + parsed.national_id)
+              messageArray.push('Weight      : ' + (parsed.weight / 10) + 'kg')
+              messageArray.push('Male/Female : ' + parsed.male_female_ratio + '%')
+              messageArray.push('Base XP     : ' + parsed.exp)
+              messageArray.push('Species     : ' + parsed.species.substr(0, 1).toUpperCase() + parsed.species.substr(1))
+              if (parsed.types[1]) {
+                messageArray.push('Types       : ' + parsed.types[1].name + ' | ' + parsed.types[0].name)
+              }
+              else {
+                messageArray.push('Type        : ' + parsed.types[0].name)
+              }
+              messageArray.push('')
+              messageArray.push(' - - - - - [STATS] - - - - - ')
+              messageArray.push('Attack          : ' + parsed.attack)
+              messageArray.push('Defense         : ' + parsed.defense)
+              messageArray.push('Special Attack  : ' + parsed.sp_atk)
+              messageArray.push('Special Defense : ' + parsed.sp_def)
+              messageArray.push('Speed           : ' + parsed.speed)
+              messageArray.push('```')
+              msg.channel.sendMessage(messageArray)
+            }
+            else {
+              msg.channel.sendMessage('I am sorry! But there is no pokémon with that Id or Name!')
+            }
+          }
+        })
+      }
+      else {
+        msg.channel.sendMessage('Uh oh! Something went wrong! Type `' + prefix + 'help pokemon` to see what you did wrong!')
+      }
     }
   }
 }
