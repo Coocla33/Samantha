@@ -108,7 +108,7 @@ var functions = {
   },
   server_create_object: {
     fn: function(server) {
-      var object = {"name": [server.name], "settings": {"admin": [server.owner.id], "joinMessage": false, "leaveMessage": false, "customPrefix": "s.", "logger": {"enable": false, "channelId": server.defaultChannel.id}}, "custom": {"join": "Oh look! A person joined the server! I think their name is `$(user_name)`!", "leave": "Oh look! A person left the server! I think their name was `$(user_name)`!"}}
+      var object = {"name": [server.name], "settings": {"admin": [server.owner.id], "joinMessage": false, "leaveMessage": false, "customPrefix": "s.", "logger": {"enable": false, "channelId": server.defaultChannel.id}}, "custom": {"join": "Oh look! A person joined the server! I think their name is `$(user_name)`!", "leave": "Oh look! A person left the server! I think their name was `$(user_name)`!"}, "stats": {"messages": 0, "userjoins": 0, "userleaves": 0, "mentions": 0, "channelcreates": 0, "channeldeletes": 0, "rolecreates": 0, "roledeletes": 0, "banadds": 0, "banremoves": 0}}
       servers[server.id] = object
       functions.servers_save.fn(servers)
     }
@@ -220,21 +220,6 @@ var functions = {
       console.log(log_time() + log_bot + 'Updated ' + amount + ' servers!')
     }
   },
-  update_users: {
-    fn: function(bot) {
-      var amount = 0
-      for (var i in bot.users.array()) {
-        if (users[bot.users.array()[i].id]) {
-          //Nothing
-        }
-        else {
-          amount = amount + 1
-          functions.user_create_object.fn(bot.users.array()[i])
-        }
-      }
-      console.log(log_time() + log_bot + 'Updated ' + amount + ' users!')
-    }
-  },
   getAchievement: {
     fn: function(users, user) {
       var achievementArray = []
@@ -336,6 +321,31 @@ var functions = {
       if (minutes < 10) {minutes = '0' + minutes}
       if (seconds < 10) {seconds = '0' + seconds}
       return '[' + hours + ':' + minutes + ':' + seconds + ']'
+    }
+  },
+  backup: {
+    fn: function(users, blacklist, servers) {
+      var date = new Date()
+      var time = '[' + date.getHours()  + ';' + date.getMinutes() + ';' + date.getSeconds() + ']'
+      var date = date.getDate() + '.' + date.getMonth() + '.' + date.getFullYear()
+      fs.writeFile('./backup/USERS/' + time + ' - ' + date + '.json', JSON.stringify(users, null, 4), function(err) {
+        if (err) console.log(log_time() + log_err + err)
+      })
+      fs.writeFile('./backup/SERVERS/' + time + ' - ' + date + '.json', JSON.stringify(servers, null, 4), function(err) {
+        if (err) console.log(log_time() + log_err + err)
+      })
+      fs.writeFile('./backup/BLACKLIST/' + time + ' - ' + date + '.json', JSON.stringify(blacklist, null, 4), function(err) {
+        if (err) console.log(log_time() + log_err + err)
+      })
+    }
+  },
+  backup_auto: {
+    fn: function(users, blacklist, servers) {
+      functions.backup.fn(users, blacklist, servers)
+      console.log(log_time() + log_bot + 'Backup created!')
+      setTimeout(() => {
+        functions.backup_auto.fn(users, blacklist, servers)
+      }, config.misc.autobackup)
     }
   }
 }
