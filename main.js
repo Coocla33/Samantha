@@ -38,9 +38,9 @@ bot.on('ready', () => {
   console.log(log_time() + log_bot + 'Channels | ' + bot.channels.size)
   console.log(log_time() + log_bot + 'Started auto-saving!')
   db.execute.save_auto.fn(servers, users, blacklist)
+  db.execute.backup_auto.fn(users, blacklist, servers)
   db.execute.status_set_auto.fn(bot)
   db.execute.update_servers.fn(bot)
-  db.execute.update_users.fn(bot)
 })
 
 //Command Execution
@@ -109,7 +109,7 @@ bot.on('message', msg => {
                     }
                   }
                 } else {
-                  msg.channel.sendMessage('Generating user profile, please retry!')
+                  msg.channel.sendMessage('Generating user profile, please retry! `This is a one time deal, unless the bot loses user data!`')
                   db.execute.user_create_object.fn(msg.author)
                 }
               }
@@ -131,19 +131,25 @@ bot.on('message', msg => {
       msg.channel.sendMessage('I\'m **very** sorry, but I refuse to work in Direct Messages!')
     }
   }
+  if (msg.channel.type == 'text') {
+    if (servers[msg.guild.id]) {
+      if (msg.mentions.users.size > 0) {
+        servers[msg.guild.id].stats.mentions += msg.mentions.users.size
+      }
+      servers[msg.guild.id].stats.messages += 1
+    }
+  }
 })
 
 //Server join
 bot.on('guildCreate', (guild) => {
   db.execute.update_servers.fn(bot)
-  db.execute.update_users.fn(bot)
   console.log(log_time() + log_bot + 'Joined a server <' + guild.name + '>!')
 })
 
 //Server leave
 bot.on('guildDelete', (guild) => {
   db.execute.server_remove_object.fn(guild)
-  db.execute.update_users.fn(bot)
   console.log(log_time() + log_bot + 'Left a server <' + guild.name + '>!')
 })
 
@@ -151,46 +157,68 @@ bot.on('guildDelete', (guild) => {
 bot.on('guildMemberAdd', (guild, member) => {
   db.execute.log.fn(bot, member, guild.id, undefined, undefined, undefined, undefined, undefined, 'user_join')
   db.execute.user_join.fn(guild, member)
-  db.execute.update_users.fn(bot)
+  if (servers[guild.id]) {
+    servers[guild.id].stats.userjoins += 1
+  }
 })
 
 //User leave
 bot.on('guildMemberRemove', (guild, member) => {
   db.execute.log.fn(bot, member, guild.id, undefined, undefined, undefined, undefined, undefined, 'user_leave')
   db.execute.user_leave.fn(guild, member)
-  db.execute.update_users.fn(bot)
+  if (servers[guild.id]) {
+    servers[guild.id].stats.userleaves += 1
+  }
 })
 
 //Ban Add
 bot.on('guildBanAdd', (guild, user) => {
   db.execute.log.fn(bot, user, guild.id, undefined, undefined, undefined, undefined, undefined, 'user_ban_add')
+  if (servers[guild.id]) {
+    servers[guild.id].stats.banadds += 1
+  }
 })
 
 //Ban Remove
 bot.on('guildBanRemove', (guild, user) => {
   db.execute.log.fn(bot, user, guild.id, undefined, undefined, undefined, undefined, undefined, 'user_ban_remove')
+  if (servers[guild.id]) {
+    servers[guild.id].stats.banremoves += 1
+  }
 })
 
 //Channel Create
 bot.on('channelCreate', (channel) => {
-  if (channel.type == 'text') {
+  if (channel.type == 'text' || channel.type == 'voice') {
     db.execute.log.fn(bot, undefined, channel.guild.id, channel, undefined, undefined, undefined, undefined, 'channel_create')
+    if (servers[channel.guild.id]) {
+      servers[guild.id].stats.channelcreates += 1
+    }
   }
 })
 
 //Channel Delete
 bot.on('channelDelete', (channel) => {
   db.execute.log.fn(bot, undefined, channel.guild.id, channel, undefined, undefined, undefined, undefined, 'channel_delete')
+  if (servers[channel.guild.id]) {
+    servers[guild.id].stats.channeldeletes += 1
+  }
 })
 
 //Role Create
 bot.on('guildRoleCreate', (guild, role) => {
   db.execute.log.fn(bot, undefined, guild.id, undefined, role, undefined, undefined, undefined, 'role_create')
+  if (servers[guild.id]) {
+    servers[guild.id].stats.rolecreates += 1
+  }
 })
 
 //Role Delete
 bot.on('guildRoleDelete', (guild, role) => {
   db.execute.log.fn(bot, undefined, guild.id, undefined, role, undefined, undefined, undefined, 'role_delete')
+  if (servers[guild.id]) {
+    servers[guild.id].stats.roledeletes += 1
+  }
 })
 
 //Message Delete
