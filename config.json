@@ -4,6 +4,7 @@
     "bot_name": "",
     "autosave": ,
     "autostatus": ,
+    "autobackuo": ,
     "debug": ,
     "requestChannel": ""
   },

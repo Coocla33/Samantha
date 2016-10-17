@@ -119,16 +119,15 @@ var cmds = {
     }
   },
   'update': {
-    'name': 'update_servers',
-    'desc': 'Update all the servers to the servers.json',
-    'usage': '<update_servers>',
+    'name': 'update',
+    'desc': 'Update everything!',
+    'usage': '<update>',
     'cooldown': 5000,
     'master': true,
     'admin': false,
     fn: function(bot, msg, suffix) {
       msg.channel.sendMessage('Check console for output!')
       db.execute.update_servers.fn(bot)
-      db.execute.update_users.fn(bot)
     }
   },
   'addadmin': {
@@ -474,6 +473,7 @@ var cmds = {
     'admin': false,
     fn: function(bot, msg, suffix) {
       var messageArray = []
+      messageArray.push('**SAMANTHA IS IN DEVELOPMENT! THIS MEANS SERVER SETTINGS/USER STATS CAN BE RESET ANY TIME!**')
       messageArray.push('About: `Samantha is a discord bot, duhh... But samantha is designed to make the life of a user better! From the server staff to a simple user that just joined for fun.`')
       messageArray.push('Version: `Fuck versions. I am just half finished`')
       messageArray.push('Github: `https://github.com/Coocla33/Samantha`')
@@ -718,7 +718,7 @@ var cmds = {
   'rpc': {
     'name': 'rpc',
     'desc': 'Rock Paper Scissors!',
-    'usage': '<rcps> [rock, paper, scissor]',
+    'usage': '<rcp> [rock, paper, scissor]',
     'cooldown': 5000,
     'master': false,
     'admin': false,
@@ -803,6 +803,27 @@ var cmds = {
       db.execute.users_save.fn(users)
       db.execute.servers_save.fn(servers)
       msg.channel.sendMessage('Saved!')
+    }
+  },
+  'serverstats': {
+    'name': 'serverStats',
+    'desc': 'Showing all the server statistics that i have gathered around!',
+    'usage': '<serverstats>',
+    'cooldown': 5000,
+    'master': false,
+    'admin': false,
+    fn: function(bot, msg, suffix) {
+      var messageArray = []
+      messageArray.push('**Server Statistics for** _**' + msg.guild.name + '!**_')
+      messageArray.push('```')
+      messageArray.push('Messages                 : ' + servers[msg.guild.id].stats.messages)
+      messageArray.push('Mentions                 : ' + servers[msg.guild.id].stats.mentions)
+      messageArray.push('Joines/Leaves            : ' + servers[msg.guild.id].stats.userjoins + '/' + servers[msg.guild.id].stats.userleaves)
+      messageArray.push('Channels Created/Removed : ' + servers[msg.guild.id].stats.channelcreates + '/' + servers[msg.guild.id].stats.channeldeletes)
+      messageArray.push('Roles Created/Removed    : ' + servers[msg.guild.id].stats.rolecreates + '/' + servers[msg.guild.id].stats.roledeletes)
+      messageArray.push('Bans Created/Removed     : ' + servers[msg.guild.id].stats.banadds + '/' + servers[msg.guild.id].stats.banremoves)
+      messageArray.push('```')
+      msg.channel.sendMessage(messageArray)
     }
   }
 }
