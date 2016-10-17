@@ -827,8 +827,8 @@ var cmds = {
       msg.channel.sendMessage(messageArray)
     }
   },
-  'pokemon': {
-    'name': 'pokemon',
+  'pokedex': {
+    'name': 'pokedex',
     'desc': 'Pokédex in a nutshell!',
     'usage': '<pokemon> [pokemon_id, pokemon_name]',
     'cooldown': 10000,
