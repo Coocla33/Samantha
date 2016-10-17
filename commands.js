@@ -829,7 +829,7 @@ var cmds = {
   },
   'pokedex': {
     'name': 'pokedex',
-    'desc': 'Pokédex in a nutshell!',
+    'desc': 'Pokédex, showing ALL the pokémon! (Exceot 719 - 721)',
     'usage': '<pokemon> [pokemon_id, pokemon_name]',
     'cooldown': 10000,
     'master': false,
@@ -851,9 +851,13 @@ var cmds = {
               messageArray.push('Name        : ' + parsed.name)
               messageArray.push('Id          : ' + parsed.national_id)
               messageArray.push('Weight      : ' + (parsed.weight / 10) + 'kg')
-              messageArray.push('Male/Female : ' + parsed.male_female_ratio + '%')
+              if (parsed.male_female_ratio) {
+                messageArray.push('Male/Female : ' + parsed.male_female_ratio + '%')
+              }
               messageArray.push('Base XP     : ' + parsed.exp)
-              messageArray.push('Species     : ' + parsed.species.substr(0, 1).toUpperCase() + parsed.species.substr(1))
+              if (parsed.species) {
+                messageArray.push('Species     : ' + parsed.species.substr(0, 1).toUpperCase() + parsed.species.substr(1))
+              }
               if (parsed.types[1]) {
                 messageArray.push('Types       : ' + parsed.types[1].name + ' | ' + parsed.types[0].name)
               }
