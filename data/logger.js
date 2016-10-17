@@ -17,13 +17,13 @@ var log = {
   user_ban_add: {
     fn: function(bot, user, logChannel) {
       var time = db.execute.get_time.fn(new Date())
-      bot.channels.get(logChannel).sendMessage('`' + time + '` - `User Ban` - Name: `' + user.user.username + '#' + user.user.discriminator + '` Id: `' + user.user.id + '`')
+      bot.channels.get(logChannel).sendMessage('`' + time + '` - `User Ban` - Name: `' + user.username + '#' + user.discriminator + '` Id: `' + user.id + '`')
     }
   },
   user_ban_remove: {
     fn: function(bot, user, logChannel) {
       var time = db.execute.get_time.fn(new Date())
-      bot.channels.get(logChannel).sendMessage('`' + time + '` - `User Unban` - Name: `' + user.user.username + '#' + user.user.discriminator + '` Id: `' + user.user.id + '`')
+      bot.channels.get(logChannel).sendMessage('`' + time + '` - `User Unban` - Name: `' + user.username + '#' + user.discriminator + '` Id: `' + user.id + '`')
     }
   },
   channel_create: {
@@ -68,7 +68,7 @@ var log = {
       }
       else {
         var time = db.execute.get_time.fn(new Date())
-        bot.channels.get(logChannel).sendMessage('`' + time + '` - `Message Update` - Old Message: \n' + oldMessage.content + '\nNew Message: \n' + newMessage.content)
+        bot.channels.get(logChannel).sendMessage('`' + time + '` - `Message Update` - ``Old Message:`` \n' + oldMessage.content + '\n``New Message:`` \n' + newMessage.content)
       }
     }
   }
