@@ -192,7 +192,7 @@ bot.on('channelCreate', (channel) => {
   if (channel.type == 'text' || channel.type == 'voice') {
     db.execute.log.fn(bot, undefined, channel.guild.id, channel, undefined, undefined, undefined, undefined, 'channel_create')
     if (servers[channel.guild.id]) {
-      servers[guild.id].stats.channelcreates += 1
+      servers[channel.guild.id].stats.channelcreates += 1
     }
   }
 })
@@ -201,7 +201,7 @@ bot.on('channelCreate', (channel) => {
 bot.on('channelDelete', (channel) => {
   db.execute.log.fn(bot, undefined, channel.guild.id, channel, undefined, undefined, undefined, undefined, 'channel_delete')
   if (servers[channel.guild.id]) {
-    servers[guild.id].stats.channeldeletes += 1
+    servers[channel.guild.id].stats.channeldeletes += 1
   }
 })
 
