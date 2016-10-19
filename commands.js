@@ -38,7 +38,7 @@ var cmds = {
   'customize': {
     'name': 'customize',
     'desc': 'Customize the bot for your server! For more brief overview, check the usage field!',
-    'usage': '<customize> [joinMessage, leaveMessage] [enable, disable, setChannel, setMessage] [custom_message]',
+    'usage': '<customize> [joinMessage, leaveMessage, settings] [enable, disable, setChannel, setMessage] [custom_message]',
     'cooldown': 5000,
     'master': false,
     'admin': true,
