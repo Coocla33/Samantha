@@ -38,83 +38,96 @@ var cmds = {
   'customize': {
     'name': 'customize',
     'desc': 'Customize the bot for your server! For more brief overview, check the usage field!',
-    'usage': '<customize> [set, enable, disable] [joinMessage, leaveMessage] [Custom_joinMessage, Custom_leaveMessage]',
+    'usage': '<customize> [joinMessage, leaveMessage] [enable, disable, setChannel, setMessage] [custom_message]',
     'cooldown': 5000,
     'master': false,
     'admin': true,
     fn: function(bot, msg, suffix) {
       if (suffix) {
-        if (suffix.toLowerCase().split(' ')[0] == 'enable') { //Enable
-          if (suffix.toLowerCase().split(' ')[1] == 'joinmessage') { //Enable JoinMessage
+        if (suffix.split(' ')[0].toLowerCase() == 'joinmessage') { //JoinMessage
+          if (suffix.split(' ')[1].toLowerCase() == 'enable') { //Enable
             if (servers[msg.guild.id].settings.joinMessage == true) {
-              msg.channel.sendMessage('This setting is already set to be enabled!')
-            } else {
+              msg.channel.sendMessage('JoinMessages are already set to be enabled!')
+            }
+            else {
               servers[msg.guild.id].settings.joinMessage = true
-              msg.channel.sendMessage('Enabled joinMessage!')
-            }
-          } else if (suffix.toLowerCase().split(' ')[1] == 'leavemessage') { //Enable LeaveMessage
-            if (servers[msg.guild.id].settings.leaveMessage == true) {
-              msg.channel.sendMessage('This setting is already set to be enabled!')
-            } else {
-              servers[msg.guild.id].settings.leaveMessage = true
-              msg.channel.sendMessage('Enabled leaveMessage!')
-            }
-          } else {
-           msg.channel.sendMessage('Oh ooh! Something went wrong! Type `' + prefix + 'help customize` to see what you did wrong!')
+              msg.channel.sendMessage('JoinMessages enabled!')
+             }
           }
-        } else if (suffix.toLowerCase().split(' ')[0] == 'disable') { //Disable
-          if (suffix.toLowerCase().split(' ')[1] == 'joinmessage') { //Disable JoinMessage
+          else if (suffix.split(' ')[1].toLowerCase() == 'disable') { //Disable
             if (servers[msg.guild.id].settings.joinMessage == false) {
-              msg.channel.sendMessage('This setting is already set to be disabled!')
-            } else {
+              msg.channel.sendMessage('JoinMessages are already set to be disabled!')
+            }
+            else {
               servers[msg.guild.id].settings.joinMessage = false
-              msg.channel.sendMessage('Disabled joinMessage!')
+              msg.channel.sendMessage('Disabled JoinMessages!')
             }
-          } else if (suffix.toLowerCase().split(' ')[1] == 'leavemessage') { //Disable LeaveMessage
-            if (servers[msg.guild.id].settings.leaveMessage == false) {
-              msg.channel.sendMessage('This setting is already set to be disabled!')
-            } else {
-              servers[msg.guild.id].settings.leaveMessage = false
-              msg.channel.sendMessage('Disabled leaveMessage!')
-            }
-          } else {
-            msg.channel.sendMessage('Uh oh! Something went wrong! Type `' + prefix + 'help customize` to see what you did wrong!')
           }
-        } else if (suffix.toLowerCase().split(' ')[0] == 'set') { //Set
-          if (suffix.toLowerCase().split(' ')[1] == 'joinmessage') { //Setting JoinMessage
-            if (servers[msg.guild.id].settings.joinMessage == true) {
-              var message_split = suffix.split(' ')
-              message = message_split.splice(2, message_split.length).join(' ')
-              if (message) {
-                servers[msg.guild.id].custom.join = message
-                msg.channel.sendMessage('Changed the join message to: `' + message + '`')
-              } else {
-                msg.channel.sendMessage('Uh oh! Something went wrong! Type `' + prefix + 'help customize` to see what you did wrong!')
-              }
-            } else {
-              msg.channel.sendMessage('Uh oh! Something went wrong! Are you sure you enabled the joinMessage? Type `' + prefix + 'help customize` to see how to enable it!')
-            }
-          } else if (suffix.toLowerCase().split(' ')[1] == 'leavemessage') { //Setting LeaveMessage
-            if (servers[msg.guild.id].settings.joinMessage == true) {
-              var message_split = suffix.split(' ')
-              message = message_split.splice(2, message_split.length).join(' ')
-              if (message) {
-                servers[msg.guild.id].custom.leave = message
-                msg.channel.sendMessage('Changed the leave message to: `' + message + '`')
-              } else {
-                msg.channel.sendMessage('Uh oh! Something went wrong! Type `' + prefix + 'help customize` to see what you did wrong!')
-              }
-            } else {
-              msg.channel.sendMessage('Uh oh! Something went wrong! Are you sure you enabled the joinMessage? Type `' + prefix + 'help customize` to see how to enable it!')
-            }
-          } else {
-            msg.channel.sendMessage('Uh oh! Something went wrong! Type `' + prefix + 'help customize` to see what you did wrong!')
+          else if (suffix.split(' ')[1].toLowerCase() == 'setchannel') { //SetChannel
+            servers[msg.guild.id].settings.joinChannel = msg.channel.id
+            msg.channel.sendMessage('Setting the JoinMessageChannel to `' + msg.channel.id + '`')
           }
-        } else {
-          msg.channel.sendMessage('Uh oh! Something went wrong! Type `' + prefix + 'help customize` to see what you did wrong!')
+          else if (suffix.split(' ')[1].toLowerCase() == 'setmessage') { //SetMessage
+            var message = suffix.split(' ')
+            message = message.splice(2, message.length).join(' ')
+            if (message) {
+              servers[msg.guild.id].custom.join = message
+              msg.channel.sendMessage('Setting JoinMessage to `' + message + '`')
+            }
+            else {
+              msg.channel.sendMessage('Uh oh! Something went wrong! Type `' + prefix + 'help customize` to see what you did wrong!')
+            }
+          }
+        }
+        else if (suffix.split(' ')[0].toLowerCase() == 'leavemessage') {
+          if (suffix.split(' ')[1]) {
+            if (suffix.split(' ')[1].toLowerCase() == 'enable') {
+              if (servers[msg.guild.id].settings.leaveMessage == true) {
+                msg.channel.sendMessage('LeaveMessages are already set to be enabled!')
+              }
+              else {
+                servers[msg.guild.id].settings.leaveMessage = true
+                msg.channel.sendMessage('LeaveMessages enabled!')
+               }
+            }
+            else if (suffix.split(' ')[1].toLowerCase() == 'disable') {
+              if (servers[msg.guild.id].settings.leaveMessage == false) {
+                msg.channel.sendMessage('LeaveMessages are already set to be disabled!')
+              }
+              else {
+                servers[msg.guild.id].settings.leaveMessage = false
+                msg.channel.sendMessage('Disabled LeaveMessages!')
+              }
+            }
+            else if (suffix.split(' ')[1].toLowerCase() == 'setchannel') {
+              servers[msg.guild.id].settings.leaveChannel = msg.channel.id
+              msg.channel.sendMessage('Setting the LeaveMessageChannel to `' + msg.channel.id + '`')
+            }
+            else if (suffix.split(' ')[1].toLowerCase() == 'setmessage') {
+              var message_split = suffix.split(' ')
+              var message_final = message_split.splice(2, message_split.length).join(' ')
+              if (message_final) {
+                servers[msg.guild.id].custom.leave = message_final
+                msg.channel.sendMessage('Setting LeaveMessage to `' + message_final + '`')
+              }
+              else {
+                msg.channel.sendMessage('Uh oh! Something went wrong! Type `' + prefix + 'help customize` to see what you did wrong!')
+                console.log('err 1')
+              }
+            }
+            else {
+              msg.channel.sendMessage('Uh oh! Something went wrong! Type `' + prefix + 'help customize` to see what you did wrong!')
+              console.log('err 2')
+            }
+          }
+          else {
+            msg.channel.sendMessage('Uh oh! Something went wrong! Type `' + prefix + 'help customize` to see what you did wrong!')
+            console.log('err 3')
+          }
         }
       } else {
         msg.channel.sendMessage('Uh oh! Something went wrong! Type `' + prefix + 'help customize` to see what you did wrong!')
+        console.log('err 4')
       }
       db.execute.servers_save.fn(servers) //Saving to Servers.json
     }
@@ -369,20 +382,21 @@ var cmds = {
       if (emojis == '') {emojis = 'No custom emojis...'}
       var messageArray = []
       var date = msg.guild.creationDate
-      messageArray.push('```')
-      messageArray.push('Name             : ' + msg.guild.name)
-      messageArray.push('ID               : ' + msg.guild.id)
-      messageArray.push('Members          : ' + msg.guild.memberCount)
-      messageArray.push('Custom Emojis    : ' + emojis)
-      messageArray.push('Channels         : ' + msg.guild.channels.size)
-      messageArray.push('Creator          : ' + msg.guild.owner.user.username)
-      messageArray.push('AFK              : ' + msg.guild.afkTimeout + 'sec')
-      messageArray.push('Created          : ' + date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear())
-      messageArray.push('DefaultChannel   : ' + msg.guild.defaultChannel.name)
-      messageArray.push('Region           : ' + msg.guild.region)
-      messageArray.push('Verification lvl : ' + msg.guild.verificationLevel)
-      messageArray.push('Roles            : ' + msg.guild.roles.map(r => r.name).join(', '))
-      messageArray.push('Icon             : ' + icon)
+      messageArray.push('_**Showing server info of ' + msg.guild.name + '**_')
+      messageArray.push('```markdown')
+      messageArray.push('# Name             : ' + msg.guild.name)
+      messageArray.push('# ID               : ' + msg.guild.id)
+      messageArray.push('# Members          : ' + msg.guild.memberCount)
+      messageArray.push('# Custom Emojis    : ' + emojis)
+      messageArray.push('# Channels         : ' + msg.guild.channels.size)
+      messageArray.push('# Creator          : ' + msg.guild.owner.user.username)
+      messageArray.push('# AFK              : ' + msg.guild.afkTimeout + 'sec')
+      messageArray.push('# Created          : ' + date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear())
+      messageArray.push('# DefaultChannel   : ' + msg.guild.defaultChannel.name)
+      messageArray.push('# Region           : ' + msg.guild.region)
+      messageArray.push('# Verification lvl : ' + msg.guild.verificationLevel)
+      messageArray.push('# Roles            : ' + msg.guild.roles.map(r => r.name).join(', '))
+      messageArray.push('# Icon             : ' + icon)
       messageArray.push('```')
       msg.channel.sendMessage(messageArray)
     }
@@ -401,28 +415,30 @@ var cmds = {
         if (game == null) {game = 'No game here!'} else {game = msg.mentions.users.array()[0].game.name}
         var avatarURL = msg.mentions.users.array()[0].avatarURL
         if (avatarURL == null) {avatarURL = 'No avatar...'}
-        messageArray.push('```')
-        messageArray.push('Name    : ' + msg.mentions.users.array()[0].username)
-        messageArray.push('ID      : ' + msg.mentions.users.array()[0].id)
-        messageArray.push('Discrim : ' + msg.mentions.users.array()[0].discriminator)
-        messageArray.push('Status  : ' + msg.mentions.users.array()[0].status)
-        messageArray.push('Game    : ' + game)
-        messageArray.push('Bot     : ' + msg.mentions.users.array()[0].bot)
-        messageArray.push('Icon    : ' + avatarURL)
+        messageArray.push('_**User info about ' + msg.mentions.users.array()[0].username + '**_')
+        messageArray.push('```markdown')
+        messageArray.push('# Name    : ' + msg.mentions.users.array()[0].username)
+        messageArray.push('# ID      : ' + msg.mentions.users.array()[0].id)
+        messageArray.push('# Discrim : ' + msg.mentions.users.array()[0].discriminator)
+        messageArray.push('# Status  : ' + msg.mentions.users.array()[0].status)
+        messageArray.push('# Game    : ' + game)
+        messageArray.push('# Bot     : ' + msg.mentions.users.array()[0].bot)
+        messageArray.push('# Icon    : ' + avatarURL)
         messageArray.push('```')
       } else {
         var game = msg.author.game
         if (game == null) {game = 'No game here!'} else {game = msg.author.game.name}
         var avatarURL = msg.author.avatarURL
         if (avatarURL == null) {avatarURL = 'No avatar...'}
-        messageArray.push('```')
-        messageArray.push('Name    : ' + msg.author.username)
-        messageArray.push('ID      : ' + msg.author.id)
-        messageArray.push('Discrim : ' + msg.author.discriminator)
-        messageArray.push('Status  : ' + msg.author.status)
-        messageArray.push('Game    : ' + game)
-        messageArray.push('Bot     : ' + msg.author.bot)
-        messageArray.push('Icon    : ' + avatarURL)
+        messageArray.push('_**User info about ' + msg.author.username + '**_')
+        messageArray.push('```markdown')
+        messageArray.push('# Name    : ' + msg.author.username)
+        messageArray.push('# ID      : ' + msg.author.id)
+        messageArray.push('# Discrim : ' + msg.author.discriminator)
+        messageArray.push('# Status  : ' + msg.author.status)
+        messageArray.push('# Game    : ' + game)
+        messageArray.push('# Bot     : ' + msg.author.bot)
+        messageArray.push('# Icon    : ' + avatarURL)
         messageArray.push('```')
       }
       msg.channel.sendMessage(messageArray)
@@ -578,13 +594,13 @@ var cmds = {
     fn: function(bot, msg, suffix) {
       var messageArray = []
       var uptime = db.execute.uptime.fn(bot.uptime / 1000)
-      messageArray.push('```')
-      messageArray.push('Name     : ' + bot.user.username + '#' + bot.user.discriminator)
-      messageArray.push('ID       : ' + bot.user.id)
-      messageArray.push('Channels : ' + bot.channels.size)
-      messageArray.push('Guilds   : ' + bot.guilds.size)
-      messageArray.push('Users    : ' + bot.users.size)
-      messageArray.push('Uptime   : ' + uptime.hour + ':' + uptime.min + ':' + uptime.sec + ' (Hour : Min : Sec)')
+      messageArray.push('```markdown')
+      messageArray.push('# Name     : ' + bot.user.username + '#' + bot.user.discriminator)
+      messageArray.push('# ID       : ' + bot.user.id)
+      messageArray.push('# Channels : ' + bot.channels.size)
+      messageArray.push('# Guilds   : ' + bot.guilds.size)
+      messageArray.push('# Users    : ' + bot.users.size)
+      messageArray.push('# Uptime   : ' + uptime.hour + ':' + uptime.min + ':' + uptime.sec + ' (Hour : Min : Sec)')
       messageArray.push('```')
       msg.channel.sendMessage(messageArray)
     }
@@ -816,13 +832,13 @@ var cmds = {
     fn: function(bot, msg, suffix) {
       var messageArray = []
       messageArray.push('**Server Statistics for** _**' + msg.guild.name + '!**_')
-      messageArray.push('```')
-      messageArray.push('Messages                 : ' + servers[msg.guild.id].stats.messages)
-      messageArray.push('Mentions                 : ' + servers[msg.guild.id].stats.mentions)
-      messageArray.push('Joines/Leaves            : ' + servers[msg.guild.id].stats.userjoins + '/' + servers[msg.guild.id].stats.userleaves)
-      messageArray.push('Channels Created/Removed : ' + servers[msg.guild.id].stats.channelcreates + '/' + servers[msg.guild.id].stats.channeldeletes)
-      messageArray.push('Roles Created/Removed    : ' + servers[msg.guild.id].stats.rolecreates + '/' + servers[msg.guild.id].stats.roledeletes)
-      messageArray.push('Bans Created/Removed     : ' + servers[msg.guild.id].stats.banadds + '/' + servers[msg.guild.id].stats.banremoves)
+      messageArray.push('```markdown')
+      messageArray.push('# Messages                 : ' + servers[msg.guild.id].stats.messages)
+      messageArray.push('# Mentions                 : ' + servers[msg.guild.id].stats.mentions)
+      messageArray.push('# Joines/Leaves            : ' + servers[msg.guild.id].stats.userjoins + '/' + servers[msg.guild.id].stats.userleaves)
+      messageArray.push('# Channels Created/Removed : ' + servers[msg.guild.id].stats.channelcreates + '/' + servers[msg.guild.id].stats.channeldeletes)
+      messageArray.push('# Roles Created/Removed    : ' + servers[msg.guild.id].stats.rolecreates + '/' + servers[msg.guild.id].stats.roledeletes)
+      messageArray.push('# Bans Created/Removed     : ' + servers[msg.guild.id].stats.banadds + '/' + servers[msg.guild.id].stats.banremoves)
       messageArray.push('```')
       msg.channel.sendMessage(messageArray)
     }
@@ -839,7 +855,7 @@ var cmds = {
         msg.channel.sendMessage('Getting your pokemon information!').then(msg => {
           var messageArray = []
           var games = []
-          messageArray.push('```')
+          messageArray.push('```markdown')
           request('https://pokeapi.co/api/v1/pokemon/' + suffix + '/', function(err, res, body) {
             if (err) {
               console.log(chalk_time() + chalk_error + err)
@@ -849,29 +865,29 @@ var cmds = {
               if (body) {
                 var parsed = JSON.parse(body)
                 messageArray.push(' - - - - - [INFO] - - - - - ')
-                messageArray.push('Name        : ' + parsed.name)
-                messageArray.push('Id          : ' + parsed.national_id)
-                messageArray.push('Weight      : ' + (parsed.weight / 10) + 'kg')
+                messageArray.push('# Name            : ' + parsed.name)
+                messageArray.push('# Id              : ' + parsed.national_id)
+                messageArray.push('# Weight          : ' + (parsed.weight / 10) + 'kg')
                 if (parsed.male_female_ratio) {
-                  messageArray.push('Male/Female : ' + parsed.male_female_ratio + '%')
+                  messageArray.push('# Male/Female     : ' + parsed.male_female_ratio + '%')
                 }
-                messageArray.push('Base XP     : ' + parsed.exp)
+                messageArray.push('# Base XP         : ' + parsed.exp)
                 if (parsed.species) {
-                  messageArray.push('Species     : ' + parsed.species.substr(0, 1).toUpperCase() + parsed.species.substr(1))
+                  messageArray.push('# Species         : ' + parsed.species.substr(0, 1).toUpperCase() + parsed.species.substr(1))
                 }
                 if (parsed.types[1]) {
-                  messageArray.push('Types       : ' + parsed.types[1].name + ' | ' + parsed.types[0].name)
+                  messageArray.push('# Types           : ' + parsed.types[1].name + ' | ' + parsed.types[0].name)
                 }
                 else {
-                  messageArray.push('Type        : ' + parsed.types[0].name)
+                  messageArray.push('# Type            : ' + parsed.types[0].name)
                 }
                 messageArray.push('')
                 messageArray.push(' - - - - - [STATS] - - - - - ')
-                messageArray.push('Attack          : ' + parsed.attack)
-                messageArray.push('Defense         : ' + parsed.defense)
-                messageArray.push('Special Attack  : ' + parsed.sp_atk)
-                messageArray.push('Special Defense : ' + parsed.sp_def)
-                messageArray.push('Speed           : ' + parsed.speed)
+                messageArray.push('# Attack          : ' + parsed.attack)
+                messageArray.push('# Defense         : ' + parsed.defense)
+                messageArray.push('# Special Attack  : ' + parsed.sp_atk)
+                messageArray.push('# Special Defense : ' + parsed.sp_def)
+                messageArray.push('# Speed           : ' + parsed.speed)
                 messageArray.push('```')
                 msg.edit(messageArray)
               }
