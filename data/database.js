@@ -7,6 +7,7 @@ const blacklist = require('./blacklist.json')
 const achievements = require('./achievements.json')
 const fs = require('fs')
 const chalk = require('chalk')
+const request = require('request')
 
 var prefix = config.misc.prefix
 
@@ -108,7 +109,7 @@ var functions = {
   },
   server_create_object: {
     fn: function(server) {
-      var object = {"name": [server.name], "settings": {"admin": [server.owner.id], "joinMessage": false, "leaveMessage": false, "customPrefix": "s.", "logger": {"enable": false, "channelId": server.defaultChannel.id}}, "custom": {"join": "Oh look! A person joined the server! I think their name is `$(user_name)`!", "leave": "Oh look! A person left the server! I think their name was `$(user_name)`!"}, "stats": {"messages": 0, "userjoins": 0, "userleaves": 0, "mentions": 0, "channelcreates": 0, "channeldeletes": 0, "rolecreates": 0, "roledeletes": 0, "banadds": 0, "banremoves": 0}}
+      var object = {"name": [server.name], "settings": {"admin": [server.owner.id], "joinMessage": false, "leaveMessage": false, "joinChannel": server.defaultChannel.id, "leaveChannel": server.defaultChannel.id, "customPrefix": "s.", "logger": {"enable": false, "channelId": server.defaultChannel.id}}, "custom": {"join": "Oh look! A person joined the server! I think their name is `$(user_name)`!", "leave": "Oh look! A person left the server! I think their name was `$(user_name)`!"}, "stats": {"messages": 0, "userjoins": 0, "userleaves": 0, "mentions": 0, "channelcreates": 0, "channeldeletes": 0, "rolecreates": 0, "roledeletes": 0, "banadds": 0, "banremoves": 0}}
       servers[server.id] = object
       functions.servers_save.fn(servers)
     }
@@ -137,7 +138,7 @@ var functions = {
           if (message.indexOf('$(server_name)') >= 0 ) {
             message = message.replace('$(server_name)', server.name)
           }
-          server.defaultChannel.sendMessage(message)
+          server.channels.get(servers[server.id].settings.joinChannel).sendMessage(message)
         }
       }
     }
@@ -153,7 +154,7 @@ var functions = {
           if (message.indexOf('$(server_name)') >= 0 ) {
             message = message.replace('$(server_name)', server.name)
           }
-          server.defaultChannel.sendMessage(message)
+          server.channels.get(servers[server.id].settings.leaveChannel).sendMessage(message)
         }
       }
     }
@@ -347,7 +348,7 @@ var functions = {
         functions.backup_auto.fn(users, blacklist, servers)
       }, config.misc.autobackup)
     }
-  }
+  },
 }
 
 exports.execute = functions
