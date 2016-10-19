@@ -101,8 +101,9 @@ var functions = {
           messageArray.push('Cooldown: `' + cmd.execute[name].cooldown + 'ms`')
           return messageArray
         }
-        else P
-        messageArray.push('Uh oh! You can not see info of this comand... Type `' + prefix + 'help` for a lit of commands you can see.')
+        else {
+          messageArray.push('Uh oh! You can not see info of this comand... Type `' + prefix + 'help` for a lit of commands you can see.')
+        }
       }
       else {
         return 'Uh oh! This command does not exist! For a full list of commands, check out `' + prefix + 'help`.'
