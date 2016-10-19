@@ -94,12 +94,15 @@ var functions = {
             return messageArray
           }
         }
-        else {
+        else if (cmd.execute[name].admin == false && cmd.execute[name].owner == false) {
           messageArray.push('Name: `' + cmd.execute[name].name + '`')
           messageArray.push('Description: `' + cmd.execute[name].desc + '`')
           messageArray.push('Usage: `' + cmd.execute[name].usage + '`')
           messageArray.push('Cooldown: `' + cmd.execute[name].cooldown + 'ms`')
           return messageArray
+        }
+        else {
+          messageArray.push('Uh oh! You can not see info of this comand... Type `' + prefix + 'help` for a lit of commands you can see.')
         }
       }
       else {
