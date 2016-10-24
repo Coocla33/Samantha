@@ -93,7 +93,7 @@ bot.on('message', msg => {
                           cooldown(msg, name)
                         } else {
                           var wait = user_cooldown[msg.author.id][name].cooldown - new Date()
-                          msg.channel.sendMessage('Woah there, Nelly.. Cool down for another `' + Math.floor(wait / 1000) + 's` to use this command again!')
+                          msg.channel.sendMessage('Woah there, Nelly.. Cool down for another `' + Math.ceil(wait / 1000) + 's` to use this command again!')
                         }
                       } else {
                         cooldown(msg, name)
