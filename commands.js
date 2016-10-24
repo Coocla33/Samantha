@@ -38,7 +38,7 @@ var cmds = {
   'customize': {
     'name': 'customize',
     'desc': 'Customize the bot for your server! For more brief overview, check the usage field!',
-    'usage': '<customize> [joinMessage, leaveMessage] [enable, disable, setChannel, setMessage] [custom_message]',
+    'usage': '<customize> [joinMessage, leaveMessage, settings] [enable, disable, setChannel, setMessage] [custom_message]',
     'cooldown': 5000,
     'master': false,
     'admin': true,
@@ -112,22 +112,45 @@ var cmds = {
               }
               else {
                 msg.channel.sendMessage('Uh oh! Something went wrong! Type `' + prefix + 'help customize` to see what you did wrong!')
-                console.log('err 1')
               }
             }
             else {
               msg.channel.sendMessage('Uh oh! Something went wrong! Type `' + prefix + 'help customize` to see what you did wrong!')
-              console.log('err 2')
             }
           }
           else {
             msg.channel.sendMessage('Uh oh! Something went wrong! Type `' + prefix + 'help customize` to see what you did wrong!')
-            console.log('err 3')
           }
         }
-      } else {
+        else if (suffix.split(' ')[0].toLowerCase() == 'settings') {
+          var messageArray = []
+          var joinMessage = 'Enabled'
+          var leaveMessage = 'Enabled'
+          var logger = 'Enabled'
+          if (servers[msg.guild.id].settings.logger.enable == false) {logger = 'Disabled'}
+          if (servers[msg.guild.id].settings.joinMessage == false) {joinMessage = 'Disabled'}
+          if (servers[msg.guild.id].settings.leaveMessage == false) {leaveMessage = 'Disabled'}
+          messageArray.push('```markdown')
+          messageArray.push(' - - - - - [SETTINGS] - - - - - ')
+          messageArray.push('# JoinMessage   : ' + joinMessage)
+          messageArray.push('# LeaveMessage  : ' + leaveMessage)
+          messageArray.push('# JoinChannel   : ' + servers[msg.guild.id].settings.joinChannel)
+          messageArray.push('# LeaveChannel  : ' + servers[msg.guild.id].settings.leaveChannel)
+          messageArray.push('# Logger        : ' + logger)
+          messageArray.push('# LoggerChannel : ' + + servers[msg.guild.id].settings.logger.channelId)
+          messageArray.push('')
+          messageArray.push(' - - - - - [CUSTOM] - - - - - ')
+          messageArray.push('# LeaveMessage  : ' + servers[msg.guild.id].custom.join)
+          messageArray.push('# JoinMessage   : ' + servers[msg.guild.id].custom.leave)
+          messageArray.push('```')
+          msg.channel.sendMessage(messageArray)
+        }
+        else {
+          msg.channel.sendMessage('Uh oh! Something went wrong! Type `' + prefix + 'help customize` to see what you did wrong!')
+        }
+      }
+      else {
         msg.channel.sendMessage('Uh oh! Something went wrong! Type `' + prefix + 'help customize` to see what you did wrong!')
-        console.log('err 4')
       }
       db.execute.servers_save.fn(servers) //Saving to Servers.json
     }
