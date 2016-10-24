@@ -4,6 +4,8 @@ const users = require('./data/users.json')
 const config = require('./config.json')
 const blacklist = require('./data//blacklist.json')
 const request = require('request')
+const unirest = require('unirest')
+const mathjs = require('mathjs')
 
 var prefix = config.misc.prefix
 
@@ -37,7 +39,7 @@ var cmds = {
   },
   'customize': {
     'name': 'customize',
-    'desc': 'Customize the bot for your server! For more brief overview, check the usage field!',
+    'desc': 'Customize the bot for your server! For more information visit the Samantha wiki! https://github.com/Coocla33/Samantha/wiki',
     'usage': '<customize> [joinMessage, leaveMessage, settings] [enable, disable, setChannel, setMessage] [custom_message]',
     'cooldown': 5000,
     'master': false,
@@ -868,7 +870,7 @@ var cmds = {
   },
   'pokedex': {
     'name': 'pokedex',
-    'desc': 'Pokédex, showing ALL the pokémon! (Exceot 719 - 721)',
+    'desc': 'Pokédex, showing ALL the pokémon! (Except 719 - 721)',
     'usage': '<pokemon> [pokemon_id, pokemon_name]',
     'cooldown': 10000,
     'master': false,
@@ -879,7 +881,7 @@ var cmds = {
           var messageArray = []
           var games = []
           messageArray.push('```markdown')
-          request('https://pokeapi.co/api/v1/pokemon/' + suffix + '/', function(err, res, body) {
+          request('https://pokeapi.co/api/v1/pokemon/' + suffix.toLowerCase() + '/', function(err, res, body) {
             if (err) {
               console.log(chalk_time() + chalk_error + err)
               msg.edit('Uh oh! Something went wrong! I think the pokemon API did it...')
@@ -923,6 +925,30 @@ var cmds = {
       }
       else {
         msg.channel.sendMessage('Uh oh! Something went wrong! Type `' + prefix + 'help pokemon` to see what you did wrong!')
+      }
+    }
+  },
+  'calc': {
+    'name': 'calc',
+    'desc': 'Calculating everything you want! I think...',
+    'usage': '<calc> [formula]',
+    'cooldown': 10000,
+    'master': false,
+    'admin': false,
+    fn: function(bot, msg, suffix) {
+      var messageArray = []
+      if (suffix) {
+        try {
+          messageArray.push('This is your formula : `' + suffix + '`')
+          messageArray.push('This is your answer : `' + mathjs.eval(suffix) + '`')
+          msg.channel.sendMessage(messageArray)
+        }
+        catch (err) {
+          msg.channel.sendMessage('Uh oh! Something went wrong! Are you sure this is a valid formula?')
+        }
+      }
+      else {
+        msg.channel.sendMessage('Uh oh! Something went wrong! Type `' + prefix + 'help calc` to see what you did wrong!')
       }
     }
   }
